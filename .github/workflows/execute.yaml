@@ -1,0 +1,22 @@
+name: Execute on push
+on:
+  push: 
+    branches: [ master ]
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    container: adamfgreen/int:2021
+    steps:
+      - name: Checkout Problems
+        uses: actions/checkout@v1
+      - name: Run the plan script
+        run: ./src/plan.sh
+      - name: Read output file
+        id: plan_output
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./out.txt
+      - uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INFO: ${{ steps.plan_output.outputs.content }}
