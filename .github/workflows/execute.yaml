@@ -1,7 +1,7 @@
 name: Execute on push
 on:
   push: 
-    branches: [ master ]
+    branches: [ master, firefighter-planning, farm_supply_chain_planning ]
 jobs:
   execute:
     runs-on: ubuntu-latest
