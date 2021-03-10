@@ -1,4 +1,4 @@
-(define (problem problem_name)
+(define (problem problem_1)
     (:domain sokoban)
     (:objects
         sq-a1 sq-a2 sq-a3 sq-b1 sq-b2 sq-b3 sq-c1 sq-c2 sq-c3 sq-d1 sq-d2 sq-d3 sq-e1 sq-e2 sq-e3 sq-f1 sq-f2 sq-f3 - square
