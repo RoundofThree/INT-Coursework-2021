@@ -1,4 +1,4 @@
-(define (problem easy) (:domain farm-supply-chain)
+(define (problem easy_clone) (:domain farm-supply-chain)
 
     (:objects
         c1 c2 c3 - client 
@@ -53,8 +53,8 @@
         (= (production-rate f1) 1.0)
         ; truck specs 
         (= (truck-max-weight t1) 10.0)
-        (= (truck-weight) 0.0)
-        ; client demand
+        (= (truck-weight t1) 0.0)
+        ; client demand 
         (demand-type c1 blackberry)
         (demand-type c2 blackberry)
         (demand-type c3 blackberry)
@@ -70,6 +70,14 @@
         ; semaphores at intersections 
         (green-light r5) ; r5 end is i1 
         (green-light r4)
+        (red-light r1)
+        (red-light r2)
+        (red-light r3)
+        (red-light r6)
+        (red-light r7)
+        (red-light r8)
+        (red-light r9)
+        (red-light r10)
         (= (green-time r5) 2.0)
         (= (green-time r1) 2.0)
         (= (green-time r2) 2.0)

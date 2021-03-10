@@ -30,6 +30,7 @@
         (road-end ?r - road ?i - intersection)    ; road ending intersection 
         (occupied ?i - intersection)                 ; occupied by truck   
 
+        (red-light ?r - road)
         (green-light ?r - road) ; traffic, will change and stay for a scheduled time 
                                                   ; semaphore is green for trucks at road r
         (can-start-time)
@@ -101,7 +102,8 @@
             (at start (not (truck-at ?t ?i))) ; truck not available 
             (at start (truck-holds ?t ?fr))
             (increase (truck-weight ?t) (* #t 1.0))
-            (decrease (farm-quantity ?f) (* #t 1.0))
+            ; (decrease (farm-quantity ?f) (* #t 1.0))
+            (at end (assign (farm-quantity ?f) 0))
             (at end (farm-at ?f ?i)) ; farm available again
             (at end (truck-at ?t ?i)) ; truck available again 
         )
@@ -122,8 +124,9 @@
             (at start (not (farm-at ?f ?i))) ; farm not available
             (at start (not (truck-at ?t ?i))) ; truck not available 
             (at start (truck-holds ?t ?fr))
-            (increase (truck-weight ?t) (* #t 1.0))
+            ; (increase (truck-weight ?t) (* #t 1.0))
             (decrease (farm-quantity ?f) (* #t 1.0))
+            (at end (assign (truck-weight ?t) (truck-max-weight ?t)))
             (at end (farm-at ?f ?i)) ; farm available again
             (at end (truck-at ?t ?i)) ; truck available again 
         )
@@ -145,7 +148,8 @@
             (at start (not (client-at ?c ?i)))
             (at start (not (truck-at ?t ?i)))
             (decrease (demand-quantity ?c ?fr) (* #t 1.0))
-            (decrease (truck-weight ?t) (* #t 1.0))
+            ; (decrease (truck-weight ?t) (* #t 1.0))
+            (at end (assign (truck-weight ?t) 0))
             (at end (not (truck-holds ?t ?fr)))
             (at end (client-at ?c ?i))
             (at end (truck-at ?t ?i))
@@ -167,8 +171,9 @@
         :effect (and 
             (at start (not (client-at ?c ?i)))
             (at start (not (truck-at ?t ?i)))
-            (decrease (demand-quantity ?c ?fr) (* #t 1.0))
+            ; (decrease (demand-quantity ?c ?fr) (* #t 1.0))
             (decrease (truck-weight ?t) (* #t 1.0))
+            (at end (assign (demand-quantity ?c ?fr) 0))
             (at end (client-at ?c ?i))
             (at end (truck-at ?t ?i))
             (at end (client-satisfied ?c))
@@ -179,7 +184,7 @@
     (:durative-action exact-unload-fruit
         :parameters (?t - truck ?i - intersection ?c - client ?fr - fruit)
         :duration (= ?duration (demand-quantity ?c ?fr))
-        :condition (and 
+        :condition (and
             (at start (> (demand-quantity ?c ?fr) 0.0))
             (at start (client-at ?c ?i))
             (at start (truck-at ?t ?i))
@@ -190,8 +195,9 @@
         :effect (and 
             (at start (not (client-at ?c ?i)))
             (at start (not (truck-at ?t ?i)))
-            (decrease (demand-quantity ?c ?fr) (* #t 1.0))
+            ; (decrease (demand-quantity ?c ?fr) (* #t 1.0))
             (decrease (truck-weight ?t) (* #t 1.0))
+            (at end (assign (demand-quantity ?c ?fr) 0))
             (at end (client-at ?c ?i))
             (at end (truck-at ?t ?i))
             (at end (not (truck-holds ?t ?fr)))
@@ -207,6 +213,7 @@
         :condition (and 
             (at start (green-light ?r))
             (at start (truck-at ?t ?src))
+            (at start (> (time-left ?r) 0.0))
             (at start (road-begin ?r ?src))
             (at start (road-end ?r ?dst))
         )
@@ -228,4 +235,32 @@
             (decrease (time-left ?r) (* #t 1.0))
         )
     )
+
+    ; should be an axiom not an action 
+    (:action turn-green
+        :parameters (?r - road)
+        :precondition (and 
+            (= (time-left ?r) 0.0)
+            (red-light ?r)
+        )
+        :effect (and 
+            (green-light ?r)
+            (not (red-light ?r))
+            (assign (time-left ?r) (green-time ?r))
+        )
+    )
+
+    (:action turn-red
+        :parameters (?r - road)
+        :precondition (and
+            (= (time-left ?r) 0.0)
+            (green-light ?r)
+        )
+        :effect (and 
+            (red-light ?r)
+            (not (green-light ?r))
+            (assign (time-left ?r) (red-time ?r))
+        )
+    )
+
 )
