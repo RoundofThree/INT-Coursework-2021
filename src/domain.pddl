@@ -94,7 +94,7 @@
             (truck-at ?t ?i)
             (forall (?fri - fruit) (truck-not-holds ?t ?fri))
             (production-type ?f ?fr)
-            (> (farm-quantity ?f) 0)
+            ; (> (farm-quantity ?f) 0)
         )
         :effect (and 
             (truck-holds ?t ?fr)
@@ -121,7 +121,7 @@
             (assign (demand-quantity ?c ?fr) 0)
             (client-satisfied ?c)
             (not (client-at ?c ?i))
-            (increase (total-reward) (+ (initial-reward ?c) (* (current-time) (reward-slope ?c))))
+            (increase (total-reward) (- (initial-reward ?c) (* (current-time) (reward-slope ?c))))
         )
     )
     
@@ -137,7 +137,7 @@
             (at start (road-end ?r ?dst))
         )
         :effect (and
-            (at start (not (truck-at ?t ?src)))
+            (at end (not (truck-at ?t ?src)))
             (at end (truck-at ?t ?dst))
         )
     )
