@@ -1,7 +1,7 @@
 ; OPTIC planner is good at scheduling the delivery of perishable goods, expressed in preferences (soft goals)
 (define 
     (domain farm-supply-chain)
-    (:requirements :strips :typing :equality :numeric-fluents :durative-actions :continuous-effects :action-costs :time :conditional-effects :constraints) 
+    (:requirements :strips :typing :equality :numeric-fluents :durative-actions :continuous-effects :action-costs :time :conditional-effects) 
 
     (:types
         ; blueberry blackberry raspberry - fruit ; types of fruit 
@@ -16,7 +16,7 @@
     ; boolean facts
     (:predicates 
         (truck-at ?t - truck ?i - intersection)   ; truck attributes 
-        (truck-holds ?f - fruit)                  ; could NOT be multiple
+        (truck-holds ?t - truck ?f - fruit)                  ; could NOT be multiple
 
         (farm-at ?f - farm ?i - intersection)     ; farm attributes
         ; (farm-available ?f - farm)                ; no other truck is loading 
@@ -90,7 +90,7 @@
         :duration (= ?duration (farm-quantity ?f))
         :condition (and 
             ; truck does not hold any other fruit at start 
-            (at start (forall (?fri - fruit) (not (truck-holds ?t ?fri))))
+            ; (at start (forall (?fri - fruit) (not (truck-holds ?t ?fri))))
             (at start (farm-at ?f ?i))
             (at start (truck-at ?t ?i))
             (at start (production-type ?f ?fr))
@@ -99,7 +99,7 @@
         :effect (and 
             (at start (not (farm-at ?f ?i))) ; farm not available
             (at start (not (truck-at ?t ?i))) ; truck not available 
-            (at start (truck-holds ?fr))
+            (at start (truck-holds ?t ?fr))
             (increase (truck-weight ?t) (* #t 1.0))
             (decrease (farm-quantity ?f) (* #t 1.0))
             (at end (farm-at ?f ?i)) ; farm available again
@@ -112,7 +112,7 @@
         :duration (= ?duration (- (truck-max-weight ?t) (truck-weight ?t)))
         :condition (and 
             ; truck does not hold any other fruit at start 
-            (at start (forall (?fri - fruit) (not (truck-holds ?t ?fri))))
+            ; (at start (forall (?fri - fruit) (not (truck-holds ?t ?fri))))
             (at start (farm-at ?f ?i))
             (at start (truck-at ?t ?i))
             (at start (production-type ?f ?fr))
@@ -121,7 +121,7 @@
         :effect (and 
             (at start (not (farm-at ?f ?i))) ; farm not available
             (at start (not (truck-at ?t ?i))) ; truck not available 
-            (at start (truck-holds ?fr))
+            (at start (truck-holds ?t ?fr))
             (increase (truck-weight ?t) (* #t 1.0))
             (decrease (farm-quantity ?f) (* #t 1.0))
             (at end (farm-at ?f ?i)) ; farm available again
@@ -134,10 +134,10 @@
         :parameters (?t - truck ?i - intersection ?c - client ?fr - fruit)
         :duration (= ?duration (truck-weight ?t))
         :condition (and 
-            (at start (not (client-satisfied ?c)))  ; negative precondition not satisfied 
+            ; (at start (not (client-satisfied ?c)))  ; negative precondition not satisfied 
             (at start (client-at ?c ?i))
             (at start (truck-at ?t ?i))
-            (at start (truck-holds ?fr))
+            (at start (truck-holds ?t ?fr))
             (at start (demand-type ?c ?fr))
             (at start (< (truck-weight ?t) (demand-quantity ?c ?fr)))
         )
@@ -146,7 +146,7 @@
             (at start (not (truck-at ?t ?i)))
             (decrease (demand-quantity ?c ?fr) (* #t 1.0))
             (decrease (truck-weight ?t) (* #t 1.0))
-            (at end (not (truck-holds ?fr)))
+            (at end (not (truck-holds ?t ?fr)))
             (at end (client-at ?c ?i))
             (at end (truck-at ?t ?i))
         )
@@ -160,7 +160,7 @@
             (at start (> (demand-quantity ?c ?fr) 0.0))
             (at start (client-at ?c ?i))
             (at start (truck-at ?t ?i))
-            (at start (truck-holds ?fr))
+            (at start (truck-holds ?t ?fr))
             (at start (demand-type ?c ?fr))
             (at start (> (truck-weight ?t) (demand-quantity ?c ?fr)))
         )
@@ -183,7 +183,7 @@
             (at start (> (demand-quantity ?c ?fr) 0.0))
             (at start (client-at ?c ?i))
             (at start (truck-at ?t ?i))
-            (at start (truck-holds ?fr))
+            (at start (truck-holds ?t ?fr))
             (at start (demand-type ?c ?fr))
             (at start (= (truck-weight ?t) (demand-quantity ?c ?fr)))
         )
@@ -194,7 +194,7 @@
             (decrease (truck-weight ?t) (* #t 1.0))
             (at end (client-at ?c ?i))
             (at end (truck-at ?t ?i))
-            (at end (not (truck-holds ?fr)))
+            (at end (not (truck-holds ?t ?fr)))
             (at end (client-satisfied ?c))
             (at end (increase (total-reward) (- (initial-reward ?c) (* (current-time) (reward-slope ?c)))))
         )
@@ -222,7 +222,7 @@
     (:process semaphore-ticker
         :parameters (?r - road)
         :precondition (and 
-            (not (= (time-left ?r) 0))
+            (> (time-left ?r) 0)
         )
         :effect (and 
             (decrease (time-left ?r) (* #t 1.0))

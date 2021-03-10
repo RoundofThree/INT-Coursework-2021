@@ -53,8 +53,8 @@
         (= (production-rate f1) 1.0)
         ; truck specs 
         (= (truck-max-weight t1) 10.0)
-        (= (truck-weight) 0.0)
-        ; client demand
+        (= (truck-weight t1) 0.0)
+        ; client demand 
         (demand-type c1 blackberry)
         (demand-type c2 blackberry)
         (demand-type c3 blackberry)
