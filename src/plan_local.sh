@@ -1,3 +1,4 @@
+#! /bin/bash
 x=1
 while [ -f ./problem_$x.pddl ]
 do
