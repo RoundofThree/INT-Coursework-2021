@@ -2,19 +2,15 @@
     ;Header and description
 
     ;remove requirements that are not needed
-    (:requirements :strips :typing :conditional-effects :negative-preconditions :equality)
+    (:requirements :strips :typing :conditional-effects :negative-preconditions)
 
     (:types
-        player square box
-        ; slow-elevator fast-elevator - elevator
-        ; passenger elevator count - object
+        square
         )
 
     (:predicates
         (player-at ?a - square)
-        ;(box-at ?a - box ?b - square)
         (box-at ?a - square)
-        ;(target-at ?a - square)
         (above ?a - square ?b - square)
         (below ?a - square ?b - square)
         (left-to ?a - square ?b - square)
