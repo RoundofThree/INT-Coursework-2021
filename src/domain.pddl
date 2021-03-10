@@ -1,7 +1,7 @@
 ; OPTIC planner is good at scheduling the delivery of perishable goods, expressed in preferences (soft goals)
 (define 
     (domain farm-supply-chain)
-    (:requirements :strips :typing :equality :numeric-fluents :durative-actions :continuous-effects :negative-preconditions :timed-initial-literals :constraints :preferences :action-costs :time :conditional-effects :constraints) 
+    (:requirements :strips :typing :equality :numeric-fluents :durative-actions :continuous-effects :action-costs :time :conditional-effects :constraints) 
 
     (:types
         ; blueberry blackberry raspberry - fruit ; types of fruit 
