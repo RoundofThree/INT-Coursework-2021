@@ -1,118 +1,61 @@
 (define (problem easy) (:domain farm-supply-chain)
 
     (:objects
-        c1 c2 c3 - client 
+        c1 - client 
         t1 - truck 
         f1 - farm 
-        r1 r2 r3 r4 r5 r6 r7 r8 r9 r10 - road ; I am thinking of a complete graph 
-        i1 i2 i3 i4 i5 - intersection 
-        blackberry blueberry raspberry - fruit ; fruit types
+        r1 r2 r3 r4 - road ; I am thinking of a complete graph 
+        i1 i2 i3 - intersection 
+        blackberry - fruit ; fruit types
     )
     (:init
         (truck-at t1 i1) ; positions 
         (client-at c1 i2)
-        (client-at c2 i4)
-        (client-at c3 i5)
         (farm-at f1 i3)
-        ; (occupied i1)
         ; intersections and roads
         (road-begin r1 i1)
-        (road-end r1 i5)
-        (= (cross-time r1) 1.0)
-        (road-begin r2 i5)
-        (road-end r2 i4)
-        (= (cross-time r2) 1.0)
-        (road-begin r3 i4)
-        (road-end r3 i3)
-        (= (cross-time r3) 1.0)
+        (road-end r1 i2)
+        (road-begin r3 i2)
+        (road-end r3 i1)
+        (= (cross-time r3) 1)
+        (= (cross-time r1) 1)
+        (road-begin r2 i2)
+        (road-end r2 i3)
         (road-begin r4 i3)
         (road-end r4 i2)
-        (= (cross-time r4) 1.0)
-        (road-begin r5 i2)
-        (road-end r5 i1)
-        (= (cross-time r5) 1.0)
-        (road-begin r6 i1)
-        (road-end r6 i4)
-        (= (cross-time r6) 1.0)
-        (road-begin r7 i4)
-        (road-end r7 i2)
-        (= (cross-time r7) 1.0)
-        (road-begin r8 i2)
-        (road-end r8 i5)
-        (= (cross-time r8) 1.0)
-        (road-begin r9 i5)
-        (road-end r9 i3)
-        (= (cross-time r9) 1.0)
-        (road-begin r10 i3)
-        (road-end r10 i1)
-        (= (cross-time r10) 1.0)
+        (= (cross-time r2) 1)
+        (= (cross-time r4) 1)
         ; farm production attributes
         (production-type f1 blackberry)  ; ONLY specify a single production type 
         (= (farm-quantity f1) 0.0)
-        (= (production-rate f1) 1.0)
-        ; truck specs 
+        (= (production-rate f1) 5.0)
+        ; truck specs
         (= (truck-weight t1) 0.0)
         (truck-not-holds t1 blackberry)
-        (truck-not-holds t1 blueberry)
-        (truck-not-holds t1 raspberry)
         ; client demand 
         (demand-type c1 blackberry)
-        (demand-type c2 blackberry)
-        (demand-type c3 blackberry)
-        (= (demand-quantity c1 blackberry) 3)
-        (= (demand-quantity c2 blackberry) 3)
-        (= (demand-quantity c3 blackberry) 3)
+        (= (demand-quantity c1 blackberry) 1)
         (= (reward-slope c1) 0.1)
-        (= (reward-slope c2) 0.1)
-        (= (reward-slope c3) 0.1)
         (= (initial-reward c1) -10)
-        (= (initial-reward c2) -10)
-        (= (initial-reward c3) -10)
         ; semaphores at intersections 
-        (green-light r5) ; r5 end is i1 
         (green-light r4)
-        (red-light r1)
-        (red-light r2)
-        (red-light r3)
-        (red-light r6)
-        (red-light r7)
-        (red-light r8)
-        (red-light r9)
-        (red-light r10)
-        (= (green-time r5) 2.0)
+        (green-light r1)
+        (green-light r2)
+        (green-light r3)
         (= (green-time r1) 2.0)
         (= (green-time r2) 2.0)
         (= (green-time r3) 2.0)
         (= (green-time r4) 2.0)
-        (= (green-time r5) 2.0)
-        (= (green-time r6) 2.0)
-        (= (green-time r7) 2.0)
-        (= (green-time r8) 2.0)
-        (= (green-time r9) 2.0)
-        (= (green-time r10) 2.0)
         
-        (= (red-time r5) 2.0)
         (= (red-time r1) 2.0)
         (= (red-time r2) 2.0)
         (= (red-time r3) 2.0)
         (= (red-time r4) 2.0)
-        (= (red-time r5) 2.0)
-        (= (red-time r6) 2.0)
-        (= (red-time r7) 2.0)
-        (= (red-time r8) 2.0)
-        (= (red-time r9) 2.0)
-        (= (red-time r10) 2.0)
 
         (= (time-left r1) 2.0)
         (= (time-left r2) 2.0)
-        (= (time-left r3) 1.0)
+        (= (time-left r3) 2.0)
         (= (time-left r4) 2.0)
-        (= (time-left r5) 1.0)
-        (= (time-left r6) 2.0)
-        (= (time-left r7) 1.0)
-        (= (time-left r8) 2.0)
-        (= (time-left r9) 1.0)
-        (= (time-left r10) 2.0)
 
         (can-start-time)
         (= (current-time) 0.0)
@@ -121,8 +64,6 @@
 
     (:goal (and
         (client-satisfied c1)
-        (client-satisfied c2)
-        (client-satisfied c3)
     ))
 
     (:metric minimize (total-reward))

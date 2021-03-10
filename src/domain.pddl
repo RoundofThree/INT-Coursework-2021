@@ -1,7 +1,7 @@
 ; OPTIC planner is good at scheduling the delivery of perishable goods, expressed in preferences (soft goals)
 (define 
     (domain farm-supply-chain)
-    (:requirements :strips :typing :equality :numeric-fluents :durative-actions :continuous-effects :action-costs :time :conditional-effects) 
+    (:requirements :strips :typing :equality :numeric-fluents :durative-actions :continuous-effects :action-costs :time) 
 
     (:types
         ; blueberry blackberry raspberry - fruit ; types of fruit 
@@ -114,10 +114,13 @@
             (>= (truck-weight ?t) (demand-quantity ?c ?fr))
         )
         :effect (and ; should be executed in order !!!!
-            (when (= (truck-weight ?t) (demand-quantity ?c ?fr)) (and (not (truck-holds ?t ?fr)) (truck-not-holds ?t ?fr)))
-            (decrease (truck-weight ?t) (demand-quantity ?c ?fr))
+            ; (when (= (truck-weight ?t) (demand-quantity ?c ?fr)) (and (not (truck-holds ?t ?fr)) (truck-not-holds ?t ?fr)))
+            (not (truck-holds ?t ?fr))
+            (not (truck-holds ?t ?fr))
+            (assign (truck-weight ?t) 0)
             (assign (demand-quantity ?c ?fr) 0)
             (client-satisfied ?c)
+            (not (client-at ?c ?i))
             (increase (total-reward) (+ (initial-reward ?c) (* (current-time) (reward-slope ?c))))
         )
     )
