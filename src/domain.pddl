@@ -2,9 +2,9 @@
   (:requirements :strips :typing :durative-actions :action-costs :numeric-fluents :conditional-effects  :time)
 
   (:types
-    walk bicycle car - transportation
+    walk bicycle car - transportation ;ways to go to other locations
     spreader
-    group
+    group ;group of people at the location
     transportation
     location
   )
@@ -13,20 +13,20 @@
     (spreader-at ?s - spreader ?l1 - location)
     (group-at ?g - group ?l1 - location)
     (accessible ?t - transportation ?l1 ?l2 - location)
-    (infected ?g - group)
-    (died ?s - spreader)
+    (infected ?g - group) ;is the group infected
+    (died ?s - spreader) ;is the spreader died due to its energy-level = 0
   )
 
   (:functions
-    (energy-level ?s - spreader)
-    (energy-required ?t - transportation ?l1 ?l2 - location)
-    (energy-to-infect ?g - group)
-    (energy-released ?g - group)
-    (infect-time-required ?g - group)
-    (walk-time-required ?w - walk ?l1 ?l2 - location)
-    (bicycle-time-required ?b - bicycle ?l1 ?l2 - location)
-    (car-time-required ?c - car ?l1 ?l2 - location)
-    (total-time)
+    (energy-level ?s - spreader) ;energy-level of the spreader
+    (energy-required ?t - transportation ?l1 ?l2 - location) ;energy required to go from l1 to l2
+    (energy-to-infect ?g - group) ;energy required to infect the group
+    (energy-released ?g - group) ;energy relased from the group back to the spreader
+    (infect-time-required ?g - group) ;time required to infect the group
+    (walk-time-required ?w - walk ?l1 ?l2 - location) ;time required to walk from l1 to l2
+    (bicycle-time-required ?b - bicycle ?l1 ?l2 - location) ;time required to cycle from l1 to l2
+    (car-time-required ?c - car ?l1 ?l2 - location) ;time required to drive from l1 to l2
+    (total-time) ;goal: minimise the total-time
   )
 
   (:durative-action walk
