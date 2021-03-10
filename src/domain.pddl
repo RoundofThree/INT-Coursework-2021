@@ -2,6 +2,7 @@
     (domain firefighter-planning)
     (:requirements :strips :typing :fluents)
 
+
     ;(:domain-variables ) ;deprecated
     (:types 
         fireStation house - location
