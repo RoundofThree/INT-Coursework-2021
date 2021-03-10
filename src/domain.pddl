@@ -17,6 +17,7 @@
     (:predicates 
         (truck-at ?t - truck ?i - intersection)   ; truck attributes 
         (truck-holds ?t - truck ?f - fruit)                  ; could NOT be multiple
+        (truck-not-holds ?t - truck ?f - fruit)
 
         (farm-at ?f - farm ?i - intersection)     ; farm attributes
         ; (farm-available ?f - farm)                ; no other truck is loading 
@@ -28,7 +29,7 @@
 
         (road-begin ?r - road ?i - intersection)  ; road beginning intersection 
         (road-end ?r - road ?i - intersection)    ; road ending intersection 
-        (occupied ?i - intersection)                 ; occupied by truck   
+        ; (occupied ?i - intersection)                 ; occupied by truck   
 
         (red-light ?r - road)
         (green-light ?r - road) ; traffic, will change and stay for a scheduled time 
@@ -38,13 +39,15 @@
 
     ; numeric facts 
     (:functions 
-        (truck-max-weight ?t - truck)             ; truck attributes 
+        ; (truck-max-weight ?t - truck)             ; truck attributes 
         ; (truck-holds-quantity ?t - truck ?f - fruit)         
         (truck-weight ?t - truck)                 ; current weight can be computed as x*a1+y*a2+z*a3+... but better stated here
 
         (production-rate ?f - farm)               ; farm attributes 
-        (farm-capacity ?f - farm)                 ; capacity can't be implemented if actions are synchronized and concurrent, when the planner doesn't support conditional-effects 
+        ; (farm-capacity ?f - farm)                 ; capacity can't be implemented if actions are synchronized and concurrent, when the planner doesn't support conditional-effects 
         (farm-quantity ?f - farm)          ; in weight 
+        ; (unload-duration ?f - farm)
+        ; (load-duration ?c - client)
 
         (demand-quantity ?c - client ?fr - fruit) ; in weight ; client attributes 
         (reward-slope ?c - client) ; slope of decrease
@@ -74,9 +77,7 @@
     ; farm production process 
     (:process produce 
         :parameters (?f - farm) 
-        :precondition (and 
-            (<= (farm-capacity ?f) (+ (farm-quantity ?f) (production-rate ?f)))
-        )
+        :precondition (can-start-time)
         :effect (and 
             (increase (farm-quantity ?f) (* #t (production-rate ?f)))
         )
@@ -86,123 +87,38 @@
     ; move from intersection to intersection (given semaphore and emptiness of that intersection)
 
     ; load all fruit available at farm from start 
-    (:durative-action load-fruit    
+    (:action load-fruit
         :parameters (?t - truck ?i - intersection ?f - farm ?fr - fruit) 
-        :duration (= ?duration (farm-quantity ?f))
-        :condition (and 
-            ; truck does not hold any other fruit at start 
-            ; (at start (forall (?fri - fruit) (not (truck-holds ?t ?fri))))
-            (at start (farm-at ?f ?i))
-            (at start (truck-at ?t ?i))
-            (at start (production-type ?f ?fr))
-            (at start (<= (farm-quantity ?f) (- (truck-max-weight ?t) (truck-weight ?t))))  ; truck has capacity 
+        :precondition (and 
+            (farm-at ?f ?i)
+            (truck-at ?t ?i)
+            (forall (?fri - fruit) (truck-not-holds ?t ?fri))
+            (production-type ?f ?fr)
+            (> (farm-quantity ?f) 0)
         )
         :effect (and 
-            (at start (not (farm-at ?f ?i))) ; farm not available
-            (at start (not (truck-at ?t ?i))) ; truck not available 
-            (at start (truck-holds ?t ?fr))
-            (increase (truck-weight ?t) (* #t 1.0))
-            ; (decrease (farm-quantity ?f) (* #t 1.0))
-            (at end (assign (farm-quantity ?f) 0))
-            (at end (farm-at ?f ?i)) ; farm available again
-            (at end (truck-at ?t ?i)) ; truck available again 
+            (truck-holds ?t ?fr)
+            (not (truck-not-holds ?t ?fr))
+            (increase (truck-weight ?t) (farm-quantity ?f))
+            (assign (farm-quantity ?f) 0)
         )
     )
 
-    (:durative-action partial-load-fruit
-        :parameters (?t - truck ?i - intersection ?f - farm ?fr - fruit)
-        :duration (= ?duration (- (truck-max-weight ?t) (truck-weight ?t)))
-        :condition (and 
-            ; truck does not hold any other fruit at start 
-            ; (at start (forall (?fri - fruit) (not (truck-holds ?t ?fri))))
-            (at start (farm-at ?f ?i))
-            (at start (truck-at ?t ?i))
-            (at start (production-type ?f ?fr))
-            (at start (> (farm-quantity ?f) (- (truck-max-weight ?t) (truck-weight ?t))))
-        )
-        :effect (and 
-            (at start (not (farm-at ?f ?i))) ; farm not available
-            (at start (not (truck-at ?t ?i))) ; truck not available 
-            (at start (truck-holds ?t ?fr))
-            ; (increase (truck-weight ?t) (* #t 1.0))
-            (decrease (farm-quantity ?f) (* #t 1.0))
-            (at end (assign (truck-weight ?t) (truck-max-weight ?t)))
-            (at end (farm-at ?f ?i)) ; farm available again
-            (at end (truck-at ?t ?i)) ; truck available again 
-        )
-    )
-
-    ; unload all the available at truck
-    (:durative-action unload-fruit
+    (:action unload-fruit
         :parameters (?t - truck ?i - intersection ?c - client ?fr - fruit)
-        :duration (= ?duration (truck-weight ?t))
-        :condition (and 
-            ; (at start (not (client-satisfied ?c)))  ; negative precondition not satisfied 
-            (at start (client-at ?c ?i))
-            (at start (truck-at ?t ?i))
-            (at start (truck-holds ?t ?fr))
-            (at start (demand-type ?c ?fr))
-            (at start (< (truck-weight ?t) (demand-quantity ?c ?fr)))
+        :precondition (and 
+            (client-at ?c ?i)
+            (truck-at ?t ?i)
+            (truck-holds ?t ?fr)
+            (demand-type ?c ?fr)
+            (>= (truck-weight ?t) (demand-quantity ?c ?fr))
         )
-        :effect (and 
-            (at start (not (client-at ?c ?i)))
-            (at start (not (truck-at ?t ?i)))
-            (decrease (demand-quantity ?c ?fr) (* #t 1.0))
-            ; (decrease (truck-weight ?t) (* #t 1.0))
-            (at end (assign (truck-weight ?t) 0))
-            (at end (not (truck-holds ?t ?fr)))
-            (at end (client-at ?c ?i))
-            (at end (truck-at ?t ?i))
-        )
-    )
-
-    ; unload limited to client need 
-    (:durative-action partial-unload-fruit
-        :parameters (?t - truck ?i - intersection ?c - client ?fr - fruit)
-        :duration (= ?duration (demand-quantity ?c ?fr))
-        :condition (and
-            (at start (> (demand-quantity ?c ?fr) 0.0))
-            (at start (client-at ?c ?i))
-            (at start (truck-at ?t ?i))
-            (at start (truck-holds ?t ?fr))
-            (at start (demand-type ?c ?fr))
-            (at start (> (truck-weight ?t) (demand-quantity ?c ?fr)))
-        )
-        :effect (and 
-            (at start (not (client-at ?c ?i)))
-            (at start (not (truck-at ?t ?i)))
-            ; (decrease (demand-quantity ?c ?fr) (* #t 1.0))
-            (decrease (truck-weight ?t) (* #t 1.0))
-            (at end (assign (demand-quantity ?c ?fr) 0))
-            (at end (client-at ?c ?i))
-            (at end (truck-at ?t ?i))
-            (at end (client-satisfied ?c))
-            (at end (increase (total-reward) (- (initial-reward ?c) (* (current-time) (reward-slope ?c)))))
-        )
-    )
-
-    (:durative-action exact-unload-fruit
-        :parameters (?t - truck ?i - intersection ?c - client ?fr - fruit)
-        :duration (= ?duration (demand-quantity ?c ?fr))
-        :condition (and
-            (at start (> (demand-quantity ?c ?fr) 0.0))
-            (at start (client-at ?c ?i))
-            (at start (truck-at ?t ?i))
-            (at start (truck-holds ?t ?fr))
-            (at start (demand-type ?c ?fr))
-            (at start (= (truck-weight ?t) (demand-quantity ?c ?fr)))
-        )
-        :effect (and 
-            (at start (not (client-at ?c ?i)))
-            (at start (not (truck-at ?t ?i)))
-            ; (decrease (demand-quantity ?c ?fr) (* #t 1.0))
-            (decrease (truck-weight ?t) (* #t 1.0))
-            (at end (assign (demand-quantity ?c ?fr) 0))
-            (at end (client-at ?c ?i))
-            (at end (truck-at ?t ?i))
-            (at end (not (truck-holds ?t ?fr)))
-            (at end (client-satisfied ?c))
-            (at end (increase (total-reward) (- (initial-reward ?c) (* (current-time) (reward-slope ?c)))))
+        :effect (and ; should be executed in order !!!!
+            (when (= (truck-weight ?t) (demand-quantity ?c ?fr)) (and (not (truck-holds ?t ?fr)) (truck-not-holds ?t ?fr)))
+            (decrease (truck-weight ?t) (demand-quantity ?c ?fr))
+            (assign (demand-quantity ?c ?fr) 0)
+            (client-satisfied ?c)
+            (increase (total-reward) (+ (initial-reward ?c) (* (current-time) (reward-slope ?c))))
         )
     )
     
@@ -218,9 +134,7 @@
             (at start (road-end ?r ?dst))
         )
         :effect (and
-            (at start (not (occupied ?src)))
             (at start (not (truck-at ?t ?src)))
-            (at end (occupied ?dst))
             (at end (truck-at ?t ?dst))
         )
     )

@@ -14,7 +14,7 @@
         (client-at c2 i4)
         (client-at c3 i5)
         (farm-at f1 i3)
-        (occupied i1)
+        ; (occupied i1)
         ; intersections and roads
         (road-begin r1 i1)
         (road-end r1 i5)
@@ -48,12 +48,13 @@
         (= (cross-time r10) 1.0)
         ; farm production attributes
         (production-type f1 blackberry)  ; ONLY specify a single production type 
-        (= (farm-capacity f1) 10.0)
         (= (farm-quantity f1) 0.0)
         (= (production-rate f1) 1.0)
         ; truck specs 
-        (= (truck-max-weight t1) 10.0)
         (= (truck-weight t1) 0.0)
+        (truck-not-holds t1 blackberry)
+        (truck-not-holds t1 blueberry)
+        (truck-not-holds t1 raspberry)
         ; client demand 
         (demand-type c1 blackberry)
         (demand-type c2 blackberry)
@@ -64,9 +65,9 @@
         (= (reward-slope c1) 0.1)
         (= (reward-slope c2) 0.1)
         (= (reward-slope c3) 0.1)
-        (= (initial-reward c1) 10)
-        (= (initial-reward c2) 10)
-        (= (initial-reward c3) 10)
+        (= (initial-reward c1) -10)
+        (= (initial-reward c2) -10)
+        (= (initial-reward c3) -10)
         ; semaphores at intersections 
         (green-light r5) ; r5 end is i1 
         (green-light r4)
@@ -124,5 +125,5 @@
         (client-satisfied c3)
     ))
 
-    (:metric maximize (total-reward))
+    (:metric minimize (total-reward))
 )
