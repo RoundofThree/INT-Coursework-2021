@@ -101,10 +101,13 @@
     (no-hole-at sq-e4)
     (no-hole-at sq-e5)
 
+    (coin-at sq-a1)
+
     (player-at p1 sq-c3)
     (bomb-at sq-c3)
 
     (= (time) 0)
+    (= (coins) 0)
     (= (bombs-available p1) 0)
 )
 
@@ -112,6 +115,16 @@
     (collected-box b1)
 ))
 
+; OPTIC should support preferences but it apparently does not 
+; (:constraints (and
+;    (preference pick-coin1 (sometime (picked-up-coin sq-a1)))
+; ))
+
+; (:metric minimize (+ 
+;                     (* 10 (is-violated pick-coin1)) 
+;                     (time)))
+
 ;un-comment the following line if metric is needed
-(:metric minimize (time))
+(:metric maximize (+ (* 5 (coins)) 
+                     (time))) ; it's more important to collect coins than to quickly pass the level 
 )

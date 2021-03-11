@@ -2,21 +2,21 @@
     ;Header and description
 
     ;remove requirements that are not needed
-    (:requirements :strips :typing :conditional-effects :numeric-fluents :action-costs :durative-actions)
+    (:requirements :strips :typing :conditional-effects :numeric-fluents :action-costs :durative-actions :preferences :constraints)
 
     ; functionalities to add:
-    ; 1- Bomb to destroy wall (details?) - take time to destroy with durative actions 
+    ; 1- Bomb to destroy wall (details?) - take time to destroy with durative actions (DONE)
     ; 2- Jump through wall?
     ; 3- Transport door (should transfer boxes or player?)
     ; 4- Push and pull
-    ; 5- Maximize reward (coins) or minimize number of moves
+    ; 5- Maximize reward (coins) or minimize number of moves (OPTIC DOES NOT SUPPORT METRIC apparently)
 
 
     ; 1- Change to add objects player, box (DONE)
     ; 2- Represent holes and collected state (DONE)
     ; 2- Represent walls (ALREADY DONE)
     ; 3- Pick up bomb (has-bomb ?s - square) (DONE)
-    ; 4- Break a wall (I have to identify first that it is a wall) 
+    ; 4- Break a wall (I have to identify first that it is a wall) (DONE)
 
     (:types
         player box 
@@ -33,6 +33,8 @@
         (hole-at ?a - square)
         (no-hole-at ?a - square)
         (bomb-at ?a - square) ; to be picked up  
+        (coin-at ?a - square) 
+        ; (picked-up-coin ?a - square)
         (above ?a - square ?b - square)  ; a is above b 
         ; (below ?a - square ?b - square) redundant
         (left-to ?a - square ?b - square); a is left to b
@@ -44,6 +46,7 @@
 
     (:functions
         (time)
+        (coins)
         (bombs-available ?p - player) 
     )
 
@@ -111,6 +114,19 @@
         )
     )
 
+    (:action pick-up-coin
+        :parameters (?current - square ?p - player)
+        :precondition (and 
+            (player-at ?p ?current)
+            (coin-at ?current)
+        )
+        :effect (and 
+            (not (coin-at ?current))
+            ; (picked-up-coin ?current)
+            (increase (coins) 1)
+        )
+    )
+    
     (:action pick-up-bomb
         :parameters (?current - square ?p - player)
         :precondition (and 
