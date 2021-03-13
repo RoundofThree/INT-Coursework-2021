@@ -59,7 +59,8 @@
         )
         :effect (and 
             (not (coin-at ?current))
-            (increase (collected-coins) 1)
+            ; (increase (collected-coins) 1)
+            (decrease (time) 1)
         )
     )
 
