@@ -1,14 +1,13 @@
 (define (domain sokoban)
-    ;Header and description
 
     ;remove requirements that are not needed
     (:requirements :strips :typing :conditional-effects :fluents :action-costs :durative-actions :preferences :constraints)
 
     ; functionalities to add:
     ; 1- Bomb to destroy wall (details?) - take time to destroy with durative actions (DONE)
-    ; 2- Jump through wall (DONE) - player can only jump if it has trampline(it can have max one trampoline at time)
-    ; 3- Transport door (should transfer boxes or player?) - NOT NECCESSARY TO IMPLEMENT(adds to randomness
-    ; 4- Push and pull - in order to push and poor a player needs to have pliers(number of pliers is predefined inp problem file )
+    ; 2- Jump through wall (DONE) - player can only jump if it has trampoline (it can have max one trampoline in a game)
+    ; 3- Transport door (should transfer boxes or player?) - NOT NECCESSARY TO IMPLEMENT (adds to randomness)
+    ; 4- Push and pull - in order to push and poor a player needs to have pliers (number of pliers is predefined in problem file )
     ; 5- Maximize reward (coins) or minimize number of moves (OPTIC DOES NOT SUPPORT METRIC apparently) - after testing this features was abondoned
 
 
@@ -17,7 +16,6 @@
     ; 2- Represent walls (ALREADY DONE)
     ; 3- Pick up bomb (has-bomb ?s - square) (DONE)
     ; 4- Break a wall (I have to identify first that it is a wall) (DONE)
-    ; 
 
     (:types
         player box square trampoline pliers
@@ -33,22 +31,40 @@
         (hole-at ?a - square)
         (no-hole-at ?a - square)
         (bomb-at ?a - square) ; to be picked up  
+        (coin-at ?a - square)
         (above ?a - square ?b - square)  ; a is above b 
         (left-to ?a - square ?b - square); a is left to b
         (is-free ?a - square) ; no player no box no wall
         (is-wall ?a - square) 
-        (collected-box ?box - box)  ; can collected boxes be moved? YES, must turn into non collected box
+        (collected-box ?box - box)  ; can collected boxes be moved? YES, they must turn into non collected box if moved away from hole 
         (trampoline-at ?a -square)
-        (has-trampoline) 
-        (has-no-trampoline)
+        (has-trampoline) ; ????
+        (has-no-trampoline) 
     )
 
     (:functions
         (time)
-        (bombs-available ?p - player)
-        (pliers-available ?p - player)  
+        (collected-coins)
+        (bombs-available ?p - player) 
+        (pliers-available ?p - player)
     )
 
+    ; PICK UP COIN
+
+    (:action pick-up-coin
+        :parameters (?current - square ?p - player)
+        :precondition (and 
+            (player-at ?p ?current)
+            (coin-at ?current)
+        )
+        :effect (and 
+            (not (coin-at ?current))
+            (increase (collected-coins) 1)
+        )
+    )
+
+    ; MOVE
+    
     (:action move-up
         :parameters (?p - player ?current - square ?dest - square)
         :precondition (and
@@ -113,86 +129,108 @@
         )
     )
 
-    (:action jump-left
-        :parameters (?p - player ?current - square ?leftSq - square ?dest - square)
+    ; JUMP
+
+    (:action pick-up-trampoline
+        :parameters (?current - square ?p - player)
         :precondition (and 
-                          (player-at ?p ?current)
-                          (left-to ?dest ?leftSq)
-                          (left-to ?leftSq ?current)
-                          (is-free ?dest)
-                          (is-wall ?leftSq)  
-                          (has-trampoline)   
+            (player-at ?p ?current)
+            (trampoline-at ?current)
+            (has-no-trampoline) ; can only pick up a trampoline if the player does not have one yet
+        )
+        :effect (and 
+            (not (trampoline-at ?current))
+            (has-trampoline)
+            (not (has-no-trampoline))
+            (increase (time) 1)
+        )
+    ) 
+
+    (:action jump-left
+        :parameters (?p - player ?current - square ?squareLeft - square ?dest - square)
+        :precondition (and 
+            (player-at ?p ?current)
+            (left-to ?dest ?squareLeft)
+            (left-to ?squareLeft ?current)
+            (is-free ?dest)
+            (is-wall ?squareLeft)  
+            (has-trampoline)   
         )
         :effect (and
-             (is-free ?current)
-             (not (player-at ?p ?current))
-             (not (is-free ?dest))
-             (player-at ?p ?dest)
-             (not(has-trampoline))
+            (is-free ?current)
+            (not (player-at ?p ?current))
+            (not (is-free ?dest))
+            (player-at ?p ?dest)
+            (not (has-trampoline))
+            (has-no-trampoline)
+            (increase (time) 1)
         )
-
     )
 
     (:action jump-right
         :parameters (?p - player ?current - square ?squareRight - square ?dest - square)
         :precondition (and
-                          (player-at ?p ?current)
-                          (left-to ?current ?squareRight)
-                          (left-to ?squareRight ?dest)
-                          (is-free ?dest)
-                          (is-wall ?squareRight)
-                          (has-trampoline)
+            (player-at ?p ?current)
+            (left-to ?current ?squareRight)
+            (left-to ?squareRight ?dest)
+            (is-free ?dest)
+            (is-wall ?squareRight)
+            (has-trampoline)
         )
         :effect (and
-                    (is-free ?current)
-                    (not (player-at ?p ?current))
-                    (not (is-free ?dest))
-                    (player-at ?p ?dest)
-                    (not(has-trampoline))
-                    (has-no-trampoline)
+            (is-free ?current)
+            (not (player-at ?p ?current))
+            (not (is-free ?dest))
+            (player-at ?p ?dest)
+            (not (has-trampoline))
+            (has-no-trampoline)
+            (increase (time) 1)
         )
     )
 
     (:action jump-up
         :parameters (?p - player ?current - square ?squareAbove - square ?dest - square)
         :precondition (and
-                          (player-at ?p ?current)
-                          (above ?dest ?squareAbove)
-                          (left-to ?squareAbove ?current)
-                          (is-free ?dest)
-                          (is-wall ?squareAbove)
-                          (has-trampoline)
+            (player-at ?p ?current)
+            (above ?dest ?squareAbove)
+            (left-to ?squareAbove ?current)
+            (is-free ?dest)
+            (is-wall ?squareAbove)
+            (has-trampoline)
         )
         :effect (and
-                    (is-free ?current)
-                    (not (player-at ?p ?current))
-                    (not (is-free ?dest))
-                    (player-at ?p ?dest)
-                    (not(has-trampoline))
-                    (has-no-trampoline)
+            (is-free ?current)
+            (not (player-at ?p ?current))
+            (not (is-free ?dest))
+            (player-at ?p ?dest)
+            (not (has-trampoline))
+            (has-no-trampoline)
+            (increase (time) 1)
         )
     )
 
     (:action jump-down
         :parameters (?p - player ?current - square ?squareBelow - square ?dest - square)
         :precondition (and
-                          (player-at ?p ?current)
-                          (above ?current ?squareBelow)
-                          (left-to ?squareBelow ?dest)
-                          (is-free ?dest)
-                          (is-wall ?squareBelow)
-                          (has-trampoline)
+            (player-at ?p ?current)
+            (above ?current ?squareBelow)
+            (left-to ?squareBelow ?dest)
+            (is-free ?dest)
+            (is-wall ?squareBelow)
+            (has-trampoline)
         )
         :effect (and
-                    (is-free ?current)
-                    (not (player-at ?p ?current))
-                    (not (is-free ?dest))
-                    (player-at ?p ?dest)
-                    (not(has-trampoline))
-                    (has-no-trampoline)
+            (is-free ?current)
+            (not (player-at ?p ?current))
+            (not (is-free ?dest))
+            (player-at ?p ?dest)
+            (not (has-trampoline))
+            (has-no-trampoline)
+            (increase (time) 1)
         )
-
     )
+
+    ; BOMB 
     
     (:action pick-up-bomb
         :parameters (?current - square ?p - player)
@@ -205,20 +243,6 @@
             (increase (bombs-available ?p) 1)
         )
     )
-
-    (:action pick-up-trampoline
-        :parameters (?current - square ?p - player)
-        :precondition (and 
-            (player-at ?p ?current)
-            (trampoline-at ?current)
-            (has-no-trampoline)
-    )
-        :effect (and 
-            (not (trampoline-at ?current))
-            (has-trampoline)
-            (not (has-no-trampoline))
-        )
-    ) 
 
     (:action break-north-wall
         :parameters (?current - square ?p - player ?target - square)
@@ -283,6 +307,8 @@
             (increase (time) 1)
         )
     )
+
+    ; PUSH BOXES 
     
     (:action push-up
         :parameters (?current - square ?p - player ?box - box ?boxbefore - square ?boxafter - square)
@@ -304,7 +330,7 @@
             (increase (time) 1)
             (not (collected-box ?box))  ; may already be not collected
             ; (when (hole-at ?boxafter) (collected-box ?box))
-            ; (when (no-hole-at ?boxafter) (not (collected-box ?box))) ; uses negative preconditions 
+            ; (when (no-hole-at ?boxafter) (not (collected-box ?box))) ; not supported by OPTIC, causes segfault
         )
     )
 
@@ -327,8 +353,6 @@
             (not (is-free ?boxafter))
             (increase (time) 1)
             (collected-box ?box)
-            ; (when (hole-at ?boxafter) (collected-box ?box))
-            ; (when (no-hole-at ?boxafter) (not (collected-box ?box))) ; uses negative preconditions 
         )
     )
     
@@ -350,9 +374,7 @@
             (box-at ?box ?boxafter)
             (not (is-free ?boxafter))
             (increase (time) 1)
-            (not (collected-box ?box))
-            ; (when (hole-at ?boxafter) (collected-box ?box))
-            ; (when (no-hole-at ?boxafter) (not (collected-box ?box))) 
+            (not (collected-box ?box)) 
         )
     )
 
@@ -374,12 +396,9 @@
             (box-at ?box ?boxafter)
             (not (is-free ?boxafter))
             (increase (time) 1)
-            (collected-box ?box)
-            ; (when (hole-at ?boxafter) (collected-box ?box))
-            ; (when (no-hole-at ?boxafter) (not (collected-box ?box))) 
+            (collected-box ?box) 
         )
     )
-    
 
     (:action push-left
         :parameters (?current - square ?p - player ?box - box ?boxbefore - square ?boxafter - square)
@@ -400,8 +419,6 @@
             (not (is-free ?boxafter))
             (increase (time) 1)
             (not (collected-box ?box))
-            ; (when (hole-at ?boxafter) (collected-box ?box))
-            ; (when (no-hole-at ?boxafter) (not (collected-box ?box))) 
         )
     )
 
@@ -424,8 +441,6 @@
             (not (is-free ?boxafter))
             (increase (time) 1)
             (collected-box ?box)
-            ; (when (hole-at ?boxafter) (collected-box ?box))
-            ; (when (no-hole-at ?boxafter) (not (collected-box ?box))) 
         )
     )
     
@@ -448,8 +463,6 @@
             (not (is-free ?boxafter))
             (increase (time) 1)
             (not (collected-box ?box))
-            ; (when (hole-at ?boxafter) (collected-box ?box))
-            ; (when (no-hole-at ?boxafter) (not (collected-box ?box))) 
         )
     )
 
@@ -472,10 +485,10 @@
             (not (is-free ?boxafter))
             (increase (time) 1)
             (collected-box ?box)
-            ; (when (hole-at ?boxafter) (collected-box ?box))
-            ; (when (no-hole-at ?boxafter) (not (collected-box ?box))) 
         )
     )
+
+    ; PULL BOXES 
 
     (:action pull-left
         :parameters (?current - square ?p - player ?box - box ?boxbefore - square ?positionafter - square)
@@ -488,7 +501,7 @@
             (> (pliers-available ?p) 0)
             (no-hole-at ?current)
         )
-             :effect (and
+        :effect (and
             (not (player-at ?p ?current))
             (is-free ?boxbefore)
             (player-at ?p ?positionafter)
@@ -507,13 +520,13 @@
         :precondition (and
             (player-at ?p ?current)
             (left-to ?boxbefore ?current)
-            (left-to ?current ?positionafter )
+            (left-to ?current ?positionafter)
             (box-at ?box ?boxbefore)
             (is-free ?positionafter)
             (> (pliers-available ?p) 0)
             (no-hole-at ?current)
         )
-             :effect (and
+        :effect (and
             (not (player-at ?p ?current))
             (is-free ?boxbefore)
             (player-at ?p ?positionafter)
@@ -537,7 +550,7 @@
             (> (pliers-available ?p) 0)
             (no-hole-at ?current)
         )
-             :effect (and
+        :effect (and
             (not (player-at ?p ?current))
             (is-free ?boxbefore)
             (player-at ?p ?positionafter)
@@ -554,14 +567,14 @@
         :parameters (?current - square ?p - player ?box - box ?boxbefore - square ?positionafter - square)
         :precondition (and
             (player-at ?p ?current)
-            (above ?boxbefore ?current )
+            (above ?boxbefore ?current)
             (above ?current ?positionafter)
             (box-at ?box ?boxbefore)
             (is-free ?positionafter)
             (> (pliers-available ?p) 0)
             (no-hole-at ?current)
         )
-             :effect (and
+        :effect (and
             (not (player-at ?p ?current))
             (is-free ?boxbefore)
             (player-at ?p ?positionafter)
@@ -585,7 +598,7 @@
             (> (pliers-available ?p) 0)
             (hole-at ?current)
         )
-             :effect (and
+        :effect (and
             (not (player-at ?p ?current))
             (is-free ?boxbefore)
             (player-at ?p ?positionafter)
@@ -605,13 +618,13 @@
         :precondition (and
             (player-at ?p ?current)
             (left-to ?boxbefore ?current)
-            (left-to ?current ?positionafter )
+            (left-to ?current ?positionafter)
             (box-at ?box ?boxbefore)
             (is-free ?positionafter)
             (> (pliers-available ?p) 0)
             (hole-at ?current)
         )
-             :effect (and
+        :effect (and
             (not (player-at ?p ?current))
             (is-free ?boxbefore)
             (player-at ?p ?positionafter)
@@ -635,7 +648,7 @@
             (> (pliers-available ?p) 0)
             (hole-at ?current)
         )
-             :effect (and
+        :effect (and
             (not (player-at ?p ?current))
             (is-free ?boxbefore)
             (player-at ?p ?positionafter)
@@ -652,14 +665,14 @@
         :parameters (?current - square ?p - player ?box - box ?boxbefore - square ?positionafter - square)
         :precondition (and
             (player-at ?p ?current)
-            (above ?boxbefore ?current )
+            (above ?boxbefore ?current)
             (above ?current ?positionafter)
             (box-at ?box ?boxbefore)
             (is-free ?positionafter)
             (> (pliers-available ?p) 0)
             (hole-at ?current)
         )
-             :effect (and
+        :effect (and
             (not (player-at ?p ?current))
             (is-free ?boxbefore)
             (player-at ?p ?positionafter)
