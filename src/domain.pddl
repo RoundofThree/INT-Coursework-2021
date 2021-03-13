@@ -38,7 +38,7 @@
         (is-wall ?a - square) 
         (collected-box ?box - box)  ; can collected boxes be moved? YES, they must turn into non collected box if moved away from hole 
         (trampoline-at ?a -square)
-        (has-trampoline) ; ????
+        (has-trampoline)
         (has-no-trampoline) 
     )
 

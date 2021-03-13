@@ -93,5 +93,4 @@
     (:goal (and
       (collected-box b1)
     ))
-
 )
