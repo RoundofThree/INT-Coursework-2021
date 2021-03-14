@@ -5,7 +5,7 @@
          b1 - box
     )
     (:init 
-        ; for better visualisation please see the pdf in attachmet called "problem1.pdf"
+        ; for better visualisation please see the pdf in attachment called "problem1.pdf"
         (above sq-a1 sq-a2)
         (above sq-a2 sq-a3)
         (above sq-a3 sq-a4)

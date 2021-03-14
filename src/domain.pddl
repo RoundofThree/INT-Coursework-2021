@@ -18,7 +18,7 @@
     ; 4- Break a wall (I have to identify first that it is a wall) (DONE)
 
     (:types
-        player box square trampoline pliers
+        player box square
     )
     
     (:constants
