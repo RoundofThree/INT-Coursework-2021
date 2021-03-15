@@ -30,7 +30,7 @@
         sq-aa1 sq-aa2 sq-aa3 sq-aa4 sq-aa5 sq-aa6 sq-aa7 sq-aa8 sq-aa9 sq-aa10 sq-aa11 sq-aa12 sq-aa13 sq-aa14 sq-aa15 sq-aa16 sq-aa17 sq-aa18 sq-aa19 sq-aa20 - square
         sq-ab1 sq-ab2 sq-ab3 sq-ab4 sq-ab5 sq-ab6 sq-ab7 sq-ab8 sq-ab9 sq-ab10 sq-ab11 sq-ab12 sq-ab13 sq-ab14 sq-ab15 sq-ab16 sq-ab17 sq-ab18 sq-ab19 sq-ab20 - square
         sq-ac1 sq-ac2 sq-ac3 sq-ac4 sq-ac5 sq-ac6 sq-ac7 sq-ac8 sq-ac9 sq-ac10 sq-ac11 sq-ac12 sq-ac13 sq-ac14 sq-ac15 sq-ac16 sq-ac17 sq-ac18 sq-ac19 sq-ac20 - square        
-        b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13 b14 b15 b16 b17 b18 b19 b20 b21 b22 b23 b24 b25 b26 b27 b28 b29 b30 b31 b32 b33 b34 b35 - box
+        b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13 b14 b15 b16 b17 b18 b19 b20 b21 b22 b23 b24 b25 b26 b27 b28 b29 b30 b31 b32 b33 b34 b35 b36 - box
     )
 
     (:init
