@@ -42,6 +42,12 @@
         (has-no-trampoline) 
     )
 
+    (:constraints 
+         (forall (?s - square)
+                 (at-most-once (player-at p1 ?s))
+         )
+    )
+
     (:functions
         (time)
         (collected-coins)
