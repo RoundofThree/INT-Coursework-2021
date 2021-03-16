@@ -2507,7 +2507,7 @@
       )   
     )
 
-    (:metric minimize (+ (* 2 (is-violated allocateBox))
+    (:metric maximize (+ (* 2 (is-violated allocateBox))
                       (* 100 (is-violated allBoxesAllocated))))
 
 )

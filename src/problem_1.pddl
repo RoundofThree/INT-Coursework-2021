@@ -90,7 +90,7 @@
         (= (bombs-available p1) 0)
     )
 
-    (:goal (and
-      (collected-box b1)
-    ))
+    (:goal 
+      (forall (?b - box) (collected-box ?b))
+    )
 )
