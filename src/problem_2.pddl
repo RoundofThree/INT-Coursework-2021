@@ -380,12 +380,7 @@
     )
 
     (:goal
-        (and
-            (collected-box b1)
-            (collected-box b2)
-            (collected-box b3)
-            (collected-box b4)
-        )
+        (forall (?b - box) (collected-box ?b))
     )
 
     ;un-comment the following line if metric is needed

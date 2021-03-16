@@ -112,15 +112,24 @@
     (= (bombs-available p1) 0)
 )
 
-(:goal (and
-    (collected-box b1)
-))
+; testing preference 
+; (:goal (and
+;          (forall (?b - box) (collected-box ?b))
+;          (preference pickUpCoin(> (collected-coins) 0))
+;         )
+; )
+
+
+; (:metric minimize (is-violated pickUpCoin))
 
 ; OPTIC should support preferences but it apparently does not 
 ; (:constraints (and
 ;    (preference pick-coin1 (sometime (picked-up-coin sq-a1)))
 ; ))
 
-(:metric minimize (- (time) (* (collected-coins) 10)))
+(:goal (and
+         (forall (?b - box) (collected-box ?b))
+))
 
+(:metric minimize (- (time) (* (collected-coins) 10)))
 )
