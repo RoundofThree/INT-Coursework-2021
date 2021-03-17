@@ -1,7 +1,6 @@
 (define (problem problem_3) (:domain sokoban)
 (:objects 
     sq-a1 sq-a2 sq-a3 sq-a4 sq-a5 sq-b1 sq-b2 sq-b3 sq-b4 sq-b5 sq-c1 sq-c2 sq-c3 sq-c4 sq-c5 sq-d1 sq-d2 sq-d3 sq-d4 sq-d5 sq-e1 sq-e2 sq-e3 sq-e4 sq-e5 sq-f1 sq-f2 sq-f3 sq-f4 sq-f5 sq-g1 sq-g2 sq-g3 sq-g4 sq-g5 sq-h1 sq-h2 sq-h3 sq-h4 sq-h5 - square
-    b1 - box 
 )
 
 (:init
@@ -74,42 +73,17 @@
     (is-wall sq-d3)
     (is-wall sq-d4)
 
-    (box-at b1 sq-d1)
-    (hole-at sq-e1)
-    (no-hole-at sq-a1)
-    (no-hole-at sq-a2)
-    (no-hole-at sq-a3)
-    (no-hole-at sq-a4)
-    (no-hole-at sq-a5)
-    (no-hole-at sq-b1)
-    (no-hole-at sq-b2)
-    (no-hole-at sq-b3)
-    (no-hole-at sq-b4)
-    (no-hole-at sq-b5)
-    (no-hole-at sq-c1)
-    (no-hole-at sq-c2)
-    (no-hole-at sq-c3)
-    (no-hole-at sq-c4)
-    (no-hole-at sq-c5)
-    (no-hole-at sq-d1)
-    (no-hole-at sq-d2)
-    (no-hole-at sq-d3)
-    (no-hole-at sq-d4)
-    (no-hole-at sq-d5)
-    (no-hole-at sq-e2)
-    (no-hole-at sq-e3)
-    (no-hole-at sq-e4)
-    (no-hole-at sq-e5)
+    (box-at sq-d1)
 
     (coin-at sq-a1)
 
-    (player-at p1 sq-c3)
+    (player-at sq-c3)
     (bomb-at sq-c3)
     (has-no-trampoline)
 
     (= (time) 0)
     (= (collected-coins) 0)
-    (= (bombs-available p1) 0)
+    (= (bombs-available) 0)
 )
 
 ; testing preference 
@@ -128,7 +102,7 @@
 ; ))
 
 (:goal (and
-         (forall (?b - box) (collected-box ?b))
+    (box-at sq-e1)
 ))
 
 (:metric minimize (- (time) (* (collected-coins) 10)))

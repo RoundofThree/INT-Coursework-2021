@@ -1,8 +1,8 @@
 # coding: utf-8
 
 import openpyxl
-wb = openpyxl.load_workbook("problem.xlsx")
-f = "problem_X.pddl"
+wb = openpyxl.load_workbook("problem(1).xlsx")
+f = "problem_9.pddl"
 
 sh = wb['Sheet1']
 row = sh['B1'].value
@@ -19,7 +19,7 @@ sokoban = wb['problem']
 
 
 with open(f,"w") as file: 
-    file.write("(define (problem problem_X)\n    (:domain sokoban)\n    (:objects\n")
+    file.write("(define (problem problem_9)\n    (:domain sokoban)\n    (:objects\n")
     # objects
     numOfBoxes = 0
     for m in range(col):
@@ -27,13 +27,14 @@ with open(f,"w") as file:
         file.write("        ")
         for i in range(1,row+1):
             file.write("sq-"+p+str(i)+" ")
-            if sokoban[p+str(i)].value == 2 or sokoban[p+str(i)].value ==6:
+            if sokoban[p+str(i)].value == 2 or sokoban[p+str(i)].value == 6:
                 numOfBoxes += 1
         file.write("- square\n")
-    file.write("        ")
-    for i in range(1, numOfBoxes+1):
-        file.write("b"+str(i)+" ")
-    file.write("- box\n    )\n\n")
+    file.write("    ")
+    # for i in range(1, numOfBoxes+1):
+    #     file.write("b"+str(i)+" ")
+    # file.write("- box\n    )\n\n")
+    file.write(")\n\n")
     
     # init
     file.write("    (:init\n\n")
@@ -60,31 +61,22 @@ with open(f,"w") as file:
     for m in range(col):
         p = colList[m]
         for i in range(1, row+1):
-            if sokoban[p+str(i)].value == 2 or sokoban[p+str(i)].value ==6:
-                box +=1
-                file.write("        (box-at b"+str(box)+" sq-"+p+str(i)+")\n")
+            if sokoban[p+str(i)].value == 2 or sokoban[p+str(i)].value == 6:
+                box += 1
+                file.write("        (box-at"+" sq-"+p+str(i)+")\n")
                 if sokoban[p+str(i)].value ==6:
                     bSet.add(box)
     
     file.write("\n")
     
-    # hole-at
-    for m in range(col):
-        p = colList[m]
-        for i in range(1, row+1):
-            if sokoban[p+str(i)].value == 5 or sokoban[p+str(i)].value ==6:
-                file.write("        (hole-at sq-"+p+str(i)+")\n")
-    
-    file.write("\n")
-    
     # no-hole-at
-    for m in range(col):
-        p = colList[m]
-        for i in range(1, row+1):
-            if sokoban[p+str(i)].value != 5 and sokoban[p+str(i)].value !=6:
-                file.write("        (no-hole-at sq-"+p+str(i)+")\n")
+    # for m in range(col):
+    #     p = colList[m]
+    #     for i in range(1, row+1):
+    #         if sokoban[p+str(i)].value != 5 and sokoban[p+str(i)].value !=6:
+    #             file.write("        (no-hole-at sq-"+p+str(i)+")\n")
     
-    file.write("\n")
+    # file.write("\n")
     
     # is-free
     for m in range(col):
@@ -127,7 +119,8 @@ with open(f,"w") as file:
         p = colList[m]
         for i in range(1, row+1):
             if sokoban[p+str(i)].value == 4:
-                file.write("        (player-at p1 sq-"+p+str(i)+")\n")
+                file.write("        (player-at sq-"+p+str(i)+")\n")
+                break
     
     file.write("\n")
     
@@ -143,10 +136,10 @@ with open(f,"w") as file:
     file.write("\n")
     
     # collected-box
-    for i in bSet:
-        file.write("        (collected-box b"+str(i)+")\n")
+    # for i in bSet:
+    #     file.write("        (collected-box b"+str(i)+")\n")
         
-    file.write("\n")
+    # file.write("\n")
     
     if has_trampoline:
         file.write("        (has-trampoline)\n")
@@ -155,15 +148,18 @@ with open(f,"w") as file:
     
     file.write("        (= (time) "+str(time)+")\n")
     file.write("        (= (collected-coins) 0)\n")
-    file.write("        (= (bombs-available p1) "+str(bombs)+")\n")
-    file.write("        (= (pliers-available p1) "+str(pliers)+")\n")
+    file.write("        (= (bombs-available) "+str(bombs)+")\n")
+    file.write("        (= (pliers-available) "+str(pliers)+")\n")
     
     file.write("    )\n")
     
     # goal
     file.write("    (:goal\n        (and\n")
-    for i in range(numOfBoxes):
-        file.write("            (collected-box b"+str(i+1)+")\n")
+    for m in range(col):
+        p = colList[m]
+        for i in range(1, row+1):
+            if sokoban[p+str(i)].value == 5 or sokoban[p+str(i)].value == 6:
+                file.write("            (box-at sq-"+p+str(i)+")\n")
     file.write("        )\n    )\n")
     
     # metric 略,这个还是自己手动加吧！

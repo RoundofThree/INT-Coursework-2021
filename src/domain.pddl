@@ -1,6 +1,5 @@
 (define (domain sokoban)
 
-    ;remove requirements that are not needed
    (:requirements :strips :typing :conditional-effects :fluents :preferences :constraints :universal-preconditions)
 
     ; Functionalities added:
@@ -33,13 +32,6 @@
         (trampoline-at ?a -square)
         (has-trampoline)
         (has-no-trampoline) 
-    )
-    
-    ; a player is at most on one square at a time
-    (:constraints 
-         (forall (?s - square)
-                 (at-most-once (player-at ?s))  ; ???????????? wrong statement
-         )
     )
 
     (:functions
@@ -414,8 +406,7 @@
         )
     )
 
-
-     (:action pull-right
+    (:action pull-right
         :parameters (?current - square ?boxbefore - square ?positionafter - square)
         :precondition (and
             (player-at ?current)
