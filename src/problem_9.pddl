@@ -75,11 +75,11 @@
 
         (box-at sq-c3)
         (box-at sq-c4)
-        (box-at sq-d3)
 
         (is-free sq-b3)
         (is-free sq-c2)
         (is-free sq-d2)
+        (is-free sq-d3)
         (is-free sq-d5)
         (is-free sq-e3)
         (is-free sq-e4)
@@ -123,7 +123,6 @@
         (and
             (box-at sq-b5)
             (box-at sq-c5)
-            (box-at sq-d3)
         )
     )
 )
