@@ -2,7 +2,6 @@
     (:domain sokoban)
     (:objects
          sq-a1 sq-a2 sq-a3 sq-a4 sq-b1 sq-b2 sq-b3 sq-b4 sq-c1 sq-c2 sq-c3 sq-c4 sq-d1 sq-d2 sq-d3 sq-d4 - square 
-         b1 - box
     )
     (:init 
         ; for better visualisation please see the pdf in attachment called "problem1.pdf"
@@ -61,36 +60,21 @@
 
         (bomb-at sq-a3)
         (bomb-at sq-b3)
-        
-        (hole-at sq-a2)
-        (no-hole-at sq-a1)
-        (no-hole-at sq-a3)
-        (no-hole-at sq-a4)
-        (no-hole-at sq-b1)
-        (no-hole-at sq-b2)
-        (no-hole-at sq-b3)
-        (no-hole-at sq-b4)
-        (no-hole-at sq-c1)
-        (no-hole-at sq-c2)
-        (no-hole-at sq-c3)
-        (no-hole-at sq-c4)
-        (no-hole-at sq-d1)
-        (no-hole-at sq-d2)
-        (no-hole-at sq-d3)
-        (no-hole-at sq-d4)
          
-        (box-at b1 sq-c4)
+        (box-at sq-c4)
         
-        (player-at p1 sq-d1)
+        (player-at sq-d1)
         (has-no-trampoline)
 
         (trampoline-at sq-c1)
         (= (time) 0)
-        (= (pliers-available p1) 10)
-        (= (bombs-available p1) 0)
+        (= (pliers-available) 10)
+        (= (bombs-available) 0)
     )
 
-    (:goal 
-      (forall (?b - box) (collected-box ?b))
+    (:goal
+      (and 
+        (box-at sq-a2)
+      )
     )
 )
