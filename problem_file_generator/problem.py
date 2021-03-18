@@ -90,7 +90,7 @@ with open(f,"w") as file:
     for m in range(col):
         p = colList[m]
         for i in range(1, row+1):
-            if sokoban[p+str(i)].value == 0 or sokoban[p+str(i)].value ==None:
+            if sokoban[p+str(i)].value != 1 and sokoban[p+str(i)].value != 2 and sokoban[p+str(i)].value != 4 and sokoban[p+str(i)].value != 6:
                 file.write("        (is-free sq-"+p+str(i)+")\n")
     
     file.write("\n")
