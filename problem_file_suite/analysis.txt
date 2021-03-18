@@ -1,0 +1,43 @@
+Problem analysis
+================
+
+Inference: planner TLEs around 100 steps puzzles 
+
+Problem_1: (test allocate boxes)
+  best: unknown
+  planner: 28 
+  tools: NO
+
+Problem_2: 
+  best: 25 
+  planner: 33
+  tools: NO
+
+Problem_3:
+  best: unknown 
+  planner: 25
+  tools: YES
+
+Problem_4:
+  best: 33
+  planner: 33
+
+Problem_5:
+  best: 69
+  planner: 81
+  tools: NO
+
+Problem_6:
+  best: 100
+  planner: 126
+  tools: NO
+
+Problem_7:
+  best: 117
+  planner: 129
+  tools: NO
+
+Problem_8:
+  best: 119
+  planner: TLE 
+  tools: NO
