@@ -1,7 +1,6 @@
 (define (domain sokoban)
 
-    ;remove requirements that are not needed
-   (:requirements :strips :typing :conditional-effects :fluents :durative-actions :preferences :constraints  :universal-preconditions)
+   (:requirements :strips :typing :conditional-effects :fluents :preferences :constraints :universal-preconditions)
 
     ; functionalities to add:
     ; 1- Bomb to destroy wall (details?) - take time to destroy with durative actions (DONE)
