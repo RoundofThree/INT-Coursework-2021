@@ -1,4 +1,5 @@
-(define (problem problem_9)
+; testing re-allocation of boxes
+(define (problem test_allocation)
     (:domain sokoban)
     (:objects
         sq-a1 sq-a2 sq-a3 sq-a4 sq-a5 sq-a6 - square
@@ -76,8 +77,11 @@
         (box-at sq-c3)
         (box-at sq-c4)
 
+        (is-free sq-b2)
         (is-free sq-b3)
+        (is-free sq-b5)
         (is-free sq-c2)
+        (is-free sq-c5)
         (is-free sq-d2)
         (is-free sq-d3)
         (is-free sq-d5)
@@ -113,8 +117,9 @@
         (player-at sq-e2)
 
 
+
         (has-no-trampoline)
-        (= (time) 0)
+        (= (time) 5)
         (= (collected-coins) 0)
         (= (bombs-available) 0)
         (= (pliers-available) 0)
