@@ -41,13 +41,6 @@
         (has-trampoline)
         (has-no-trampoline) 
     )
-    
-    ; a player is at most on one square at a time
-    (:constraints 
-         (forall (?s - square)
-                 (at-most-once (player-at p1 ?s))
-         )
-    )
 
     (:functions
         (time)
