@@ -5,8 +5,8 @@ wb = openpyxl.load_workbook("problem.xlsx")
 f = "problem_9.pddl"
 
 sh = wb['Sheet1']
-row = sh['B1'].value
-col = sh['B2'].value
+row = 7 # sh['B1'].value
+col = 8 # sh['B2'].value
 
 time = sh['B3'].value
 bombs = sh['B4'].value
@@ -15,11 +15,11 @@ pliers = sh['B5'].value
 
 colList = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','aa','ab','ac','ad']
 
-sokoban = wb['problem']
+sokoban = wb['p119steps']
 
 
 with open(f,"w") as file: 
-    file.write("(define (problem problem_9)\n    (:domain sokoban)\n    (:objects\n")
+    file.write("(define (problem p119steps)\n    (:domain sokoban)\n    (:objects\n")
     # objects
     numOfBoxes = 0
     for m in range(col):
@@ -82,7 +82,7 @@ with open(f,"w") as file:
     for m in range(col):
         p = colList[m]
         for i in range(1, row+1):
-            if sokoban[p+str(i)].value == 0 or sokoban[p+str(i)].value ==None:
+            if sokoban[p+str(i)].value != 1 and sokoban[p+str(i)].value != 2 and sokoban[p+str(i)].value != 4 and sokoban[p+str(i)].value != 6:
                 file.write("        (is-free sq-"+p+str(i)+")\n")
     
     file.write("\n")

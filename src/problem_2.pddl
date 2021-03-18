@@ -1,8 +1,4 @@
-; best: 25 steps
-; worst: 41 steps 
-; without tools 
-
-(define (problem problem_2)
+(define (problem p7steps)
     (:domain sokoban)
     (:objects
         sq-a1 sq-a2 sq-a3 sq-a4 sq-a5 - square
@@ -10,7 +6,6 @@
         sq-c1 sq-c2 sq-c3 sq-c4 sq-c5 - square
         sq-d1 sq-d2 sq-d3 sq-d4 sq-d5 - square
         sq-e1 sq-e2 sq-e3 sq-e4 sq-e5 - square
-        sq-f1 sq-f2 sq-f3 sq-f4 sq-f5 - square
     )
 
     (:init
@@ -35,10 +30,6 @@
         (above sq-e2 sq-e3)
         (above sq-e3 sq-e4)
         (above sq-e4 sq-e5)
-        (above sq-f1 sq-f2)
-        (above sq-f2 sq-f3)
-        (above sq-f3 sq-f4)
-        (above sq-f4 sq-f5)
 
         (left-to sq-a1 sq-b1)
         (left-to sq-a2 sq-b2)
@@ -60,57 +51,48 @@
         (left-to sq-d3 sq-e3)
         (left-to sq-d4 sq-e4)
         (left-to sq-d5 sq-e5)
-        (left-to sq-e1 sq-f1)
-        (left-to sq-e2 sq-f2)
-        (left-to sq-e3 sq-f3)
-        (left-to sq-e4 sq-f4)
-        (left-to sq-e5 sq-f5)
 
-        (box-at sq-c3)
-        (box-at sq-d2)
-        (box-at sq-d4)
-        (box-at sq-e3)
+        (box-at sq-b3)
+        (box-at sq-c2)
+        (box-at sq-c4)
+        (box-at sq-d3)
 
-        (is-free sq-a4)
-        (is-free sq-a5)
-        (is-free sq-b1)
-        (is-free sq-b2)
-        (is-free sq-b3)
-        (is-free sq-b4)
-        (is-free sq-b5)
+        (is-free sq-a3)
         (is-free sq-c1)
         (is-free sq-c5)
-        (is-free sq-d1)
-        (is-free sq-d5)
-        (is-free sq-e1)
-        (is-free sq-e5)
-        (is-free sq-f1)
-        (is-free sq-f2)
-        (is-free sq-f3)
-        (is-free sq-f4)
-        (is-free sq-f5)
+        (is-free sq-e3)
 
-        (is-wall sq-a1)
+
         (is-wall sq-a2)
-        (is-wall sq-a3)
+        (is-wall sq-a4)
+        (is-wall sq-b1)
+        (is-wall sq-b2)
+        (is-wall sq-b4)
+        (is-wall sq-b5)
+        (is-wall sq-d1)
+        (is-wall sq-d2)
+        (is-wall sq-d4)
+        (is-wall sq-d5)
+        (is-wall sq-e2)
+        (is-wall sq-e4)
 
 
 
-        (player-at sq-d3)
+        (player-at sq-c3)
 
 
         (has-no-trampoline)
-        (= (time) 0)
+        (= (time) 5)
         (= (collected-coins) 0)
         (= (bombs-available) 0)
         (= (pliers-available) 0)
     )
     (:goal
         (and
-            (box-at sq-c2)
-            (box-at sq-c4)
-            (box-at sq-e2)
-            (box-at sq-e4)
+            (box-at sq-a3)
+            (box-at sq-c1)
+            (box-at sq-c5)
+            (box-at sq-e3)
         )
     )
 )
