@@ -1,7 +1,7 @@
 # coding: utf-8
 
 import openpyxl
-wb = openpyxl.load_workbook("problem(1).xlsx")
+wb = openpyxl.load_workbook("problem.xlsx")
 f = "problem_9.pddl"
 
 sh = wb['Sheet1']
