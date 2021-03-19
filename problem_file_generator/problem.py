@@ -2,7 +2,7 @@
 
 import openpyxl
 wb = openpyxl.load_workbook("problem.xlsx")
-f = "problem_8.pddl"
+f = "problem_9.pddl"
 
 sh = wb['Sheet1']
 row = 7 # sh['B1'].value
@@ -15,11 +15,11 @@ pliers = sh['B5'].value
 
 colList = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','aa','ab','ac','ad']
 
-sokoban = wb['p119steps']
+sokoban = wb['p169steps']
 
 
 with open(f,"w") as file: 
-    file.write("(define (problem p119steps)\n    (:domain sokoban)\n    (:objects\n")
+    file.write("(define (problem p169steps)\n    (:domain sokoban)\n    (:objects\n")
     # objects
     numOfBoxes = 0
     for m in range(col):
