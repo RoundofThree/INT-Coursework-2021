@@ -104,7 +104,5 @@
      )
     )
 
-    (:metric minimize (-(total-cost)
-                        (collected-coins)
-    ))
+    (:metric minimize (-(total-cost) (collected-coins)))
 )

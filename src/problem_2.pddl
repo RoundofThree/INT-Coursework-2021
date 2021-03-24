@@ -134,12 +134,18 @@
 
 
         (has-no-trampoline)
-        (= (time) 0)
+        (= (total-cost) 0)
         (= (collected-coins) 0)
         (= (bombs-available p1) 0)
         (= (pliers-available p1) 0)
     )
-    (:goal
-       (forall (?b -box) (collected-box ?b))
+
+    (:goal (and 
+       (forall (?b - box) (collected-box ?b))
+        ; (> (collected-coins) 0)
+        (preference  (> (collected-coins) 0))
+     )
     )
+
+    (:metric minimize (-(total-cost) (collected-coins)))
 )

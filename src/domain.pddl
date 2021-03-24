@@ -43,7 +43,7 @@
 
     (:functions
         (total-cost)
- (collected-coins)
+        (collected-coins)
         (bombs-available ?p - player) 
         (pliers-available ?p - player)
     )
