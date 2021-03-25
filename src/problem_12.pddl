@@ -524,7 +524,7 @@
             (collected-box b4)
             (collected-box b5)
             (collected-box b6)
-        (preference (> (collected-coins) 0))
+            (preference (> (collected-coins) 0))
         )
     )
     (:metric minimize (- (total-cost) (collected-coins)))
