@@ -41,3 +41,15 @@ Problem_8:
   best: 119
   planner: TLE 
   tools: NO
+Problem_9:
+  best: 169
+  planner: 201
+  tools: No
+Problem_10:
+  best: 195
+  planner: 225
+  tools: No
+Problem_11:
+  best: 201
+  planner: 263
+  tools: No
