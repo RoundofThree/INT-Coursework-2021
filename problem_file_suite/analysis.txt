@@ -1,55 +1,89 @@
 Problem analysis
 ================
 
-Inference: planner TLEs around 100 steps puzzles 
+Inference: planner TLEs around ~250 steps puzzles. With some anomaly: 429 step puzzle solved in little time. 
+Here by tools we mean the planner no. steps after adding 10 pliers to original problem 
+Here by planner we mean the planner and the original problem, without tools 
+Here by best we mean the best score in Microban website
+
+Format of columns: steps, time, number of states evaluated during search 
 
 Problem_1: (test allocate boxes)
   best: unknown
-  planner: 28 
-  tools: NO
+  planner: 28, 0.11s, 106 states 
+  tools: 18, 0.13s, 147 states 
 
 Problem_2: 
   best: 25 
-  planner: 33
-  tools: NO
+  planner: 33, 1.73s, 1150 states 
+  tools: 19, 0.1s, 87 states 
 
 Problem_3:
-  best: unknown 
-  planner: 25
-  tools: YES
+  best: 25
+  planner: 25, 0.16s, 352 states 
+  tools: ALREADY, not changes
 
 Problem_4:
   best: 33
-  planner: 33
+  planner: 33, 0.28s, 396 states 
+  tools: 12, 0.03s, 35 states 
 
 Problem_5:
   best: 69
-  planner: 81
-  tools: NO
+  planner: 81, 21.84s, 6475 states 
+  tools: 29, 44.31s, 12889 states 
 
 Problem_6:
   best: 100
-  planner: 126
-  tools: NO
+  planner: 126, 25.53s, 7276 states 
+  tools: 118, 533.50s, 137535 states 
 
 Problem_7:
   best: 117
-  planner: 129
-  tools: NO
+  planner: 129, 358.41s, 89873 states 
+  tools: 117, 301.88s, 87887 states 
 
 Problem_8:
   best: 119
-  planner: TLE 
-  tools: NO
+  planner: TLE
+  tools: 128, 88.38s, 21992 states 
+
 Problem_9:
   best: 169
-  planner: 201
-  tools: No
+  planner: 201, 297.89s, 55628 states 
+  tools: 103, 397.06s, 97430 states 
+
 Problem_10:
   best: 195
-  planner: 225
-  tools: No
+  planner: 225, 274.08s, 41715 states 
+  tools: unsolvable
+  
 Problem_11:
   best: 201
-  planner: 263
-  tools: No
+  planner: 263, 205.84s, 31984 states 
+  tools: unsolvable
+
+Problem_12:
+  best: 212
+  planner: unsolvable
+  tools: unsolvable
+
+Problem_13:
+  best: 233
+  planner: unsolvable
+  tools: unsolvable
+
+Problem_14:
+  best: 282
+  planner: unsolvable
+  tools: unsolvable
+
+Problem_15:
+  best: 335
+  planner: unsolvable
+  tools: unsolvable
+
+Problem_16:
+  best: 429
+  planner: 429, 48.96s, 6150 states 
+  tools: 429, 479.55s, 50172 states evaluated
