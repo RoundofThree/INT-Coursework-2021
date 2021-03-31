@@ -160,26 +160,52 @@ To select a robust and more complete range of problems in the puzzle domain, we 
 \textbf{Anomalies - Move to plan quality analysis section}
 
 \subsection{Plan quality analysis}
-\textbf{Please change me to the data in analysis.txt. I will change this in branch problem-analysis. Please don't change it here.}
+\textbf{Writing, please don't remove the charts.}
+
+% STEPS
+Why is it appropriate to choose number of steps as the plan quality measure. 
+If we do so...
+
+These are ordered ideas, not a script. 
+
+\begin{itemize}
+  \item \textbf{Without tools}
+  \item Overall trend in number of steps without tools slightly worse then benchmark. The difference between without-tools and benchmark
+        increases as the complexity gradually increases. 
+  \item The planner without tools TLEs in around ~250 steps benchmark, exception: P16 
+  \item Anomaly: some problems with less steps benchmark are unsolvable while P16 is solvable. Examples: P3 and P8.
+  \item \textbf{With tools}
+  \item Overall trend irregular. The addition of tools benefits some problem scenarios more than others.
+  \item When it finds a solution, it is more optimal than without-tools. See P8 is solvable under with-tools. 
+  \item Anomaly: but some problems solvable without tools are not solvable with tools: P10 and P11. We can infer from the shape that the 
+        with-tools planner is likely to TLE for the increased search space. This explains why with-tools finds more optimal solutions or 
+        it finds a solution when without-tools TLEs \textbf{in smaller search spaces}. The with-tools increases the search space by a multiple,
+        which eventually makes it more inefficient.
+\end{itemize}
+
+% TIME 
+
+If we observe the time taken to solve. And why it is not appropriate to 
+use time taken to solve as a plan quality measure. 
 
 \pgfplotstableread[col sep=&, header=true]{
 description&with-tools&without-tools&benchmark
-1&15&1&123
-2&12&1&145
-3&34&1&123
-4&23&1&1245
-5&56&1&1
-6&67&1&1
-7&201&1&1
-8&233&1&1
-9&123&1&1
-10&123&1&1
-11&250&1&1
-12&429&1&1
-13&112&1&1
-14&123&1&1
-15&123&1&1
-16&145&1&1
+1&18&28&0
+2&19&33&25
+3&25&0&25
+4&12&33&33
+5&29&81&69
+6&118&126&100
+7&117&129&117
+8&128&0&119
+9&103&201&169
+10&0&225&195
+11&0&263&201
+12&0&0&212
+13&0&0&233
+14&0&0&282
+15&0&0&335
+16&429&429&429
 }\datatableentry
 
 \begin{tikzpicture}
@@ -200,6 +226,99 @@ description&with-tools&without-tools&benchmark
     \end{axis}
 
 \end{tikzpicture}
+
+% STATES 
+
+\begin{itemize}
+  \item Although the problems are ordered by 
+\end{itemize}
+
+% ADD a column of total states in search space 
+% search space = 2^{number predicates}
+% number predicates = |square|+|box|*|square|+|square|+|bomb|+|coin|+|square|*|square|*2+|square|+|square|+|box|+|square|+1
+%                   = (|box|+2*|square|+5)*|square| + |bomb| + |coin| + |box| + 1
+% Problem 1: |square| = 36, |box| = 2, search space = overflow
+\pgfplotstableread[col sep=&, header=true]{
+description&with-tools&without-tools&benchmark
+1&18&28&0
+2&19&33&25
+3&25&0&25
+4&12&33&33
+5&29&81&69
+6&118&126&100
+7&117&129&117
+8&128&0&119
+9&103&201&169
+10&0&225&195
+11&0&263&201
+12&0&0&212
+13&0&0&233
+14&0&0&282
+15&0&0&335
+16&429&429&429
+}\datatableentry
+
+\begin{tikzpicture}
+    \begin{axis}[
+        title={By solve time},
+        enlarge y limits ={value=0.2,upper},
+        xtick=data,
+        xticklabels ={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16},  
+        x tick label style={rotate=-45,anchor=west,font=\tiny},
+        legend style={font=\tiny,legend pos=north west,legend cell align=left},
+      ]
+      \addlegendentry{Planner with tools};
+      \addplot [color=blue] table [y=with-tools, x expr=\coordindex] {\datatableentry};
+      \addlegendentry{Planner without tools};
+      \addplot [color=red] table [y=without-tools, x expr=\coordindex] {\datatableentry};
+      \addlegendentry{Benchmark};
+      \addplot [color=gray] table [y=benchmark, x expr=\coordindex] {\datatableentry};
+    \end{axis}
+
+\end{tikzpicture}
+
+\pgfplotstableread[col sep=&, header=true]{
+description&with-tools&without-tools
+1&147&106
+2&87&1150
+3&352&0
+4&35&396
+5&12889&6475
+6&137535&7276
+7&87887&89873
+8&21992&0
+9&97430&55628
+10&0&41715
+11&0&31984
+12&0&0
+13&0&0
+14&0&0
+15&0&0
+16&50172&6150
+}\datatableentry
+
+\begin{tikzpicture}
+    \begin{axis}[
+        title={By number of states evaluated},
+        enlarge y limits ={value=0.2,upper},
+        xtick=data,
+        xticklabels ={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16},  
+        x tick label style={rotate=-45,anchor=west,font=\tiny},
+        legend style={font=\tiny,legend pos=north west,legend cell align=left},
+      ]
+      \addlegendentry{Planner with tools};
+      \addplot [color=blue] table [y=with-tools, x expr=\coordindex] {\datatableentry};
+      \addlegendentry{Planner without tools};
+      \addplot [color=red] table [y=without-tools, x expr=\coordindex] {\datatableentry};
+      \addlegendentry{Benchmark};
+      \addplot [color=gray] table [y=benchmark, x expr=\coordindex] {\datatableentry};
+    \end{axis}
+
+\end{tikzpicture}
+
+
+\textbf{https://www.groundai.com/project/ai-in-game-playing-sokoban-solver/1}
+
 
 
 \end{document}

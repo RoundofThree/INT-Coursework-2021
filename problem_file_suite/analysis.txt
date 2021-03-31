@@ -16,7 +16,7 @@ Problem_1: (test allocate boxes)
 Problem_2: 
   best: 25 
   planner: 33, 1.73s, 1150 states 
-  tools: 19, 0.1s, 87 states 
+  tools: 19, 0.1s, 87 states
 
 Problem_3:
   best: 25
