@@ -1,4 +1,6 @@
-(define (problem p429steps)
+; with tools
+; 429 steps
+(define (problem problem_30)
     (:domain sokoban)
     (:objects
         sq-a1 sq-a2 sq-a3 sq-a4 sq-a5 sq-a6 sq-a7 sq-a8 sq-a9 sq-a10 sq-a11 sq-a12 sq-a13 sq-a14 sq-a15 sq-a16 sq-a17 - square

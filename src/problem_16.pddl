@@ -1,8 +1,7 @@
-; testing re-allocation of boxes
-; Best: 20 something 
-; without tools 
+; Best: 24 
+; with tools 
 
-(define (problem p24steps)
+(define (problem problem_16)
     (:domain sokoban)
     (:objects
         sq-a1 sq-a2 sq-a3 sq-a4 sq-a5 sq-a6 - square
