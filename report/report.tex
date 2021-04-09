@@ -265,6 +265,8 @@ description&planner&benchmark
         xticklabels ={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},  
         x tick label style={rotate=-45,anchor=west,font=\tiny},
         legend style={font=\tiny,legend pos=north west,legend cell align=left},
+        xlabel = {$problem number$},
+	      ylabel = {$number of steps$},
       ]
       \addlegendentry{Planner with tools};
       \addplot [color=blue] table [y=with-tools, x expr=\coordindex] {\datatableentry};
@@ -311,6 +313,8 @@ description&with-tools&without-tools
         xticklabels ={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},  
         x tick label style={rotate=-45,anchor=west,font=\tiny},
         legend style={font=\tiny,legend pos=north west,legend cell align=left},
+        xlabel = {$problem number$},
+	      ylabel = {$states evaluted$},
       ]
       \addlegendentry{Planner with tools};
       \addplot [color=blue] table [y=with-tools, x expr=\coordindex] {\datatableentry};
@@ -354,6 +358,8 @@ description&with-tools&without-tools
         xticklabels ={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},  
         x tick label style={rotate=-45,anchor=west,font=\tiny},
         legend style={font=\tiny,legend pos=north west,legend cell align=left},
+        xlabel = {$problem number$},
+	      ylabel = {$solve time$},
       ]
       \addlegendentry{Planner with tools};
       \addplot [color=blue] table [y=with-tools, x expr=\coordindex] {\datatableentry};
