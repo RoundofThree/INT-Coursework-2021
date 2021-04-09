@@ -16,7 +16,7 @@
 % plot line graphs 
 \usepackage{pgfplots, pgfplotstable}
 \pgfplotsset{compat=1.16}
-%\nocopyright
+\nocopyright
 %PDF Info Is REQUIRED.
 % For /Author, add all authors within the parentheses, separated by commas. No accents or commands.
 % For /Title, add Title in Mixed Case. No accents or commands. Retain the parentheses.
@@ -265,8 +265,8 @@ description&planner&benchmark
         xticklabels ={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},  
         x tick label style={rotate=-45,anchor=west,font=\tiny},
         legend style={font=\tiny,legend pos=north west,legend cell align=left},
-        xlabel = {$problem number$},
-	      ylabel = {$number of steps$},
+        xlabel = {Problem number},
+	      ylabel = {Number of steps},
       ]
       \addlegendentry{Planner};
       \addplot [color=red] table [y=planner, x expr=\coordindex] {\datatableentry};
@@ -311,8 +311,8 @@ description&with-tools&without-tools
         xticklabels ={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},  
         x tick label style={rotate=-45,anchor=west,font=\tiny},
         legend style={font=\tiny,legend pos=north west,legend cell align=left},
-        xlabel = {$problem number$},
-	      ylabel = {$states evaluted$},
+        xlabel = {Problem number},
+	      ylabel = {Solve time},
       ]
       \addlegendentry{Planner with tools};
       \addplot [color=blue] table [y=with-tools, x expr=\coordindex] {\datatableentry};
@@ -354,8 +354,8 @@ description&with-tools&without-tools
         xticklabels ={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},  
         x tick label style={rotate=-45,anchor=west,font=\tiny},
         legend style={font=\tiny,legend pos=north west,legend cell align=left},
-        xlabel = {$problem number$},
-	      ylabel = {$solve time$},
+        xlabel = {Problem number},
+	      ylabel = {Number of states evaluated},
       ]
       \addlegendentry{Planner with tools};
       \addplot [color=blue] table [y=with-tools, x expr=\coordindex] {\datatableentry};
