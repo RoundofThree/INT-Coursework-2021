@@ -160,10 +160,10 @@ minimum number of steps
 taken by a human player to solve it, starting with a 
 problem with best score 25 steps up to a problem with 
 best score 429 steps. The data of the best scores of
-human players are collected from the Microban website \cite{microban}. 
+human players are collected from the Sokoban Online website \cite{microban}. 
 This is more representative than trying to solve the 
 problems ourselves and using our best score to compare 
-to that of the OPTIC planner. Given that the Microban 
+to that of the OPTIC planner. Given that the Sokoban Online 
 community is an active community with global Sokoban 
 grandmasters, it is likely that the best score data 
 from the website is the global minimum number of steps
@@ -172,7 +172,7 @@ to solve each problem.
 These problems are, however, just testing a part of
 the expressiveness of our domain, because our PDDL
 domain can also encode the use of tools --- 
-bombs and pliers. Thus, we run the same set 
+bombs, pliers and trampolines. Thus, we run the same set 
 of problems but with added tools (each initially 
 with 10 available pliers) to observe how planner 
 would handle those additional actions. 
@@ -186,7 +186,7 @@ the planner is not able to find a solution. While we expect
 that the plan quality compared to a benchmark decreases as the
 difficulty increases, it is possible to find counterexamples, 
 because the difficulty measure (smallest
-number of steps required to solve by human players in Microban) 
+number of steps required to solve by human players in Sokoban Online) 
 is merely a heuristics. 
 
 \subsection{Plan quality measure}

@@ -3,18 +3,10 @@
    (:requirements :strips :typing :fluents :preferences :universal-preconditions :action-costs )
 
     ; functionalities to add:
-    ; 1- Bomb to destroy wall (details?) - take total-cost to destroy with durative actions (DONE)
-    ; 2- Jump through wall (DONE) - player can only jump if it has trampoline (it can have max one trampoline in a game)
-    ; 3- Transport door (should transfer boxes or player?) - NOT NECCESSARY TO IMPLEMENT (adds to randomness)
-    ; 4- Push and pull - in order to push and poor a player needs to have pliers (number of pliers is predefined in problem file )
-    ; 5- Maximize reward (coins) or minimize number of moves (OPTIC DOES NOT SUPPORT METRIC apparently) - after testing this features was abondoned
-
-
-    ; 1- Change to add objects player, box (DONE)
-    ; 2- Represent holes and collected state (DONE)
-    ; 2- Represent walls (ALREADY DONE)
-    ; 3- Pick up bomb (has-bomb ?s - square) (DONE)
-    ; 4- Break a wall (I have to identify first that it is a wall) (DONE)
+    ; 1- Bomb to destroy wall 
+    ; 2- Jump through wall - player can only jump if it has trampoline (it can have max one trampoline in a game)
+    ; 3- Push and pull - in order to push and poor a player needs to have pliers (number of pliers is predefined in problem file)
+    ; 4- Maximize reward (coins) or minimize number of moves (OPTIC DOES NOT SUPPORT METRIC apparently) - after testing this features was abandoned
 
     (:types
         player box square

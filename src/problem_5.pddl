@@ -1,4 +1,5 @@
-(define (problem p100steps)
+; 100 steps
+(define (problem problem_5)
     (:domain sokoban)
     (:objects
         sq-a1 sq-a2 sq-a3 sq-a4 sq-a5 sq-a6 sq-a7 - square
