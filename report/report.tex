@@ -106,7 +106,23 @@ Planning in artificial intelligence has been instrumental in a variety of applic
 \end{abstract}
 
 \section{Introduction}
-This model simulates a well-known grid-based puzzle video game \emph{"Sokoban"}. The original game comes with an objective for a player to push all boxes into predefined storage locations or units. Based on this construct we have added some creativity and enabled tools to be used. The domain represents the 2D \(N*N\) grid with helper tools such as \emph{"trampoline"} which enables the player to jump across the wall or \emph{"bomb"} which enables the player to break walls. Helper tools are placed on grids to be picked up by the user. Because the domain world is represented by a grid with composite squares as single units. The convention used in the problem files are grids being vertically marked with ascending numbers and horizontally with alphabetical characters growing with lexical order (i.e., first most upper left square is represented as \emph{"sq-a1"}, please see Figure \ref{fig:example}). For sake of scalability and variations of problem files, every player has been supplied with number of pre-set \emph{"pliers"} which enables the player to pull a box in any direction. Any of such tools can be used only once and decreases with the use. Except for the trampoline, a player can pick up any number of tools bigger than one. The interesting aspect of this model is that instead of having a concrete goal that defines a box to be at specific positions (i.e., box at square a3). We let planner freely choose to which storage location (represented by a hole in our domain world) player will push the box as long as we allocate all boxes to storage locations(marked as a collected box if the box is pushed on the hole - storage location). Besides, players can re-allocate a box even if it is already on the storage location. Those features add to the flexibility and increment the possibility of finding a plan. For creativity considerations, we have randomly added coins on squares to be picked up. The overall aim of the modified version \emph{"Sokoban 2.0"} is to push all the boxes on storage units with the minimum total cost and the maximum number of coins collected on the way.
+This model simulates a well-known grid-based puzzle video game \emph{"Sokoban"}. The original game comes with an 
+objective for a player to push all boxes into predefined storage locations or units. For sake of scalability
+and variations of problem files, we have added some tools to the classic version of the game. The domain represents
+a 2D \(N*N\) grid with helper tools such as \emph{"trampoline"} which enables player to jump across the wall.
+The player can also take a number of \emph{"bomb"} and \emph{"pliers"} with them. The former enables the player to
+break walls while the latter enables the player to pull box in any direction. Those two items are consumable, which
+means their quantity decreases with each usage, and they can also be placed on grids to be picked up by user.
+Because the domain world is represented by a grid with composite squares as single units. The convention used in the 
+problem files are grids being vertically marked with ascending numbers and horizontally with alphabetical characters 
+growing with lexical order (i.e. the most top-left square is represented as \emph{"sq-a1"}, please see Figure \ref{fig:example}).  
+It is worth noting that in a sokoban game, There is no designated storage location for each location. The player
+would win as long as they allocate all boxes to storage locations (marked as collected box if box is pushed on the hole
+- storage location). Therefore, in our implementation, we let planner freely choose to which storage location 
+(represented as a hole in our domain world) the box should be placed. In addition, player can re-allocate boxes even 
+if it is already on storage location. Those features add to flexibility and increment the possibility of finding a 
+plan. For creativity considerations, we have randomly added coins on squares to be picked up. The overall aim of modified
+version \emph{"Sokoban 2.0"} is to push all the boxes on storage units with minimum total cost and maximum number of coins collected on the way.  
 \begin{figure}
     \includegraphics[width=2.8in]{figure1.JPG} \\
     \caption{Example of proposed Sokoban puzzle solved with 33 steps using OPTIC planner}\label{fig:example}
