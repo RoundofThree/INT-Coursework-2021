@@ -148,46 +148,101 @@ make it harder to solve for the planner. We will also compare the plan quality o
 \subsection{Difficulty measure as problem selection criteria}
 To select a robust and more complete range of problems in the puzzle domain, we chose to classify the problems according
  to a difficulty measure, and then select a problem suite which covers low difficulty to high difficulty problems. 
- However, finding which problem parameter is the most representative difficulty measure is not an easy task. According 
- to a research paper about the difficulty of Sokoban problems \textbf{(Please change me to a reference)}, there is no single difficulty measure which gives 
- consistent evaluation of the actual difficulty for all problem instances. There are many plausible measures, such as
+ However, finding which problem parameter is the most representative difficulty measure is not an easy task. There are many plausible measures, such as
   the number of steps taken to push all the boxes to the holes, the time taken by a solver (human or artificial 
   intelligence planner) to solve the puzzle or the percentage of successful plays. We will use the first one as our 
   difficulty measure heuristics for this research project for the sake of simplicity.
 
 \subsection{Selected problem suite}
+Specifically, we will order the problems according to the
+minimum number of steps
+taken by a human player to solve it, starting with a 
+problem with best score 25 steps up to a problem with 
+best score 429 steps. The data of the best scores of
+human players are collected from the Microban website. \textbf{Please cite the Microban website!!}. 
+This is more representative than trying to solve the 
+problems ourselves and using our best score to compare 
+to that of the OPTIC planner. Given that the Microban 
+community is an active community with global Sokoban 
+grandmasters, it is likely that the best score data 
+from the website is the global minimum number of steps
+to solve each problem. 
+   
+These problems are, however, just testing a part of
+the expressiveness of our domain, because our PDDL
+domain can also encode the use of tools --- 
+bombs and pliers. Thus, we run the same set 
+of problems but with added tools (each initially 
+with 10 available pliers) to observe how planner 
+would handle those additional actions. 
 
-\textbf{Anomalies - Move to plan quality analysis section}
+\subsection{Anomalies in difficulty rating}
+Before diving into the analysis of the planner's plans, note 
+that there may be anomalies in our difficulty assessment 
+and the planner's behavior. There may be some problems 
+which are easier to solve according to our difficulty measure but 
+the planner is not able to find a solution. While we expect
+that the plan quality compared to a benchmark decreases as the
+difficulty increases, it is possible to find counterexamples, 
+because the difficulty measure (smallest
+number of steps required to solve by human players in Microban) 
+is merely a heuristics. 
+
+\subsection{Plan quality measure}
+In a Sokoban game, players are rated according to the number
+of steps they use to solve the game, and the lowest number 
+is marked as their best score. Therefore, using the number of steps 
+as plan quality measure fits well our purpose. 
+
+In some online games, players are also ranked according to 
+the time taken to solve the level. However, the major problem
+with this quality measure is its strong dependence 
+on hardware in which the planner is running on. 
+It is thus not worth comparing the planner's solve time 
+and human players' average time. 
+
+Another possible quality measure is the number of coins the 
+planner collects during its plan trajectory. However, we tested 
+the OPTIC planner with a trivial game instance where there is a 
+coin in the initial position of the player and the player only 
+has to push the box forward to solve the game. It turns out that
+the planner's plan does not collect the immediately available coin. 
+
+From what is stated above, we will choose the number of steps 
+as the plan quality measure for this reasearch. 
+The benchmark is the best player score in Microban website (\textbf{citeme!!!}).
+
+
 
 \subsection{Plan quality analysis}
-\textbf{Writing, please don't remove the charts.}
 
-% STEPS
-Why is it appropriate to choose number of steps as the plan quality measure. 
-If we do so...
+The diagram in \textbf{Figure 1} illustrates how the solution given by the 
+planner (without tools) differs from the benchmark in terms of number 
+of steps taken. The trend from problem 1 to problem 15 
+suggests that number of steps is effectively a good estimation of 
+problem difficulty. The planner can sometimes find the 
+optimal solution for problems with under 33 moves. 
+Between 40 to 200 steps, even if the problem is solvable 
+by the planner, the difference between the benchmark and the 
+plan's number of steps is increasing. 
+Beyond that, the problem size becomes 
+unsolvable. However, the planner managed to solve the
+problem 16, when it requires 429 steps for a human player 
+to solve it. 
+Problem 16 is distinctive because 
+it involves only one box, while other problems with difficulty 
+heuristics equal to
+200-plus steps consist of at least 3 boxes. 
 
-These are ordered ideas, not a script. 
+This discovery implies that, the number of steps required is not 
+the mere factor that makes a problem difficult, the number of boxes 
+or other underlying characteristics of the problem also play a role. 
+A similar point is also suggested in a research study: 
+there is no single difficulty measure which gives consistent 
+evaluation of the actual difficulty for all problem instances
+\cite{difficulty-rating}.
 
-\begin{itemize}
-  \item \textbf{Without tools}
-  \item Overall trend in number of steps without tools slightly worse then benchmark. The difference between without-tools and benchmark
-        increases as the complexity gradually increases. 
-  \item The planner without tools TLEs in around ~250 steps benchmark, exception: P16 
-  \item Anomaly: some problems with less steps benchmark are unsolvable while P16 is solvable. Examples: P3 and P8.
-  \item \textbf{With tools}
-  \item Overall trend irregular. The addition of tools benefits some problem scenarios more than others.
-  \item When it finds a solution, it is more optimal than without-tools. See P8 is solvable under with-tools. 
-  \item Anomaly: but some problems solvable without tools are not solvable with tools: P10 and P11. We can infer from the shape that the 
-        with-tools planner is likely to TLE for the increased search space. This explains why with-tools finds more optimal solutions or 
-        it finds a solution when without-tools TLEs \textbf{in smaller search spaces}. The with-tools increases the search space by a multiple,
-        which eventually makes it more inefficient.
-\end{itemize}
-
-% TIME 
-
-If we observe the time taken to solve. And why it is not appropriate to 
-use time taken to solve as a plan quality measure. 
-
+% Figure 1 
 \pgfplotstableread[col sep=&, header=true]{
 description&with-tools&without-tools&benchmark
 1&18&28&0
@@ -208,6 +263,7 @@ description&with-tools&without-tools&benchmark
 16&429&429&429
 }\datatableentry
 
+\begin{figure}
 \begin{tikzpicture}
     \begin{axis}[
         title={By number of steps},
@@ -226,18 +282,20 @@ description&with-tools&without-tools&benchmark
     \end{axis}
 
 \end{tikzpicture}
+\caption{By number of steps}
+\end{figure}
 
-% STATES 
 
-\begin{itemize}
-  \item Although the problems are ordered by 
-\end{itemize}
+Moreover, for a human player, providing additional tools, such as pliers, would 
+only make the problems easier to solve. However, when it comes to planners, 
+it seems not the case. When experimenting with the problem files, we noticed 
+that, despite it would solve the problem without any tools, the planner is 
+unable to give any solution for problems 10 and 11 when provided with 10 
+pliers. A plausible explanation is illustrated in in \textbf{Figure 2} and 
+\textbf{Figure 3}. 
 
-% ADD a column of total states in search space 
-% search space = 2^{number predicates}
-% number predicates = |square|+|box|*|square|+|square|+|bomb|+|coin|+|square|*|square|*2+|square|+|square|+|box|+|square|+1
-%                   = (|box|+2*|square|+5)*|square| + |bomb| + |coin| + |box| + 1
-% Problem 1: |square| = 36, |box| = 2, search space = overflow
+
+% Figure 2
 \pgfplotstableread[col sep=&, header=true]{
 description&with-tools&without-tools
 1&147&106
@@ -277,6 +335,12 @@ description&with-tools&without-tools
 
 \end{tikzpicture}
 
+% ADD a column of total states in search space 
+% search space = 2^{number predicates}
+% number predicates = |square|+|box|*|square|+|square|+|bomb|+|coin|+|square|*|square|*2+|square|+|square|+|box|+|square|+1
+%                   = (|box|+2*|square|+5)*|square| + |bomb| + |coin| + |box| + 1
+% Problem 1: |square| = 36, |box| = 2, search space = overflow
+% Figure 3
 \pgfplotstableread[col sep=&, header=true]{
 description&with-tools&without-tools
 1&0.13&0.11
@@ -316,9 +380,55 @@ description&with-tools&without-tools
 
 \end{tikzpicture}
 
+These two diagrams show that, due to more actions become possible, 
+when provided with additional tools, planner would evaluate more 
+states and take a longer time to derive a solution. This implies 
+the planner fails to effectively prune out bad uses of the tool and 
+wasted a lot of resources exploring unsolvable states. 
 
-\textbf{https://www.groundai.com/project/ai-in-game-playing-sokoban-solver/1}
+\subsection{Plan quality analysis improvements}
+The only measure of the plan quality was whether 
+the designed plan solves the problem and how many 
+steps was taken to achieve the goal. Perhaps a better 
+evolution strategy is to define a set of preferable 
+soft goals which is preferable to achieve but not 
+compulsory. As the plan results in a higher number 
+of correctly allocated boxes, the higher the quality 
+of the plan.  This is helpful to analyze problems 
+of higher difficulty in more detail rather than 
+treating them all as unsolvable. We can observe 
+how the plan quality over the benchmark increases 
+or deteriorates, based on the number of achieved 
+soft goals.  
 
+If OPTIC supports \texttt{:preference} and \texttt{forall}
+PDDL features we could write 
+\begin{verbatim}
+(preference allBoxesAllocated 
+  (forall (?b - box) (collected-box ?b))
+)  
+\end{verbatim}
+or 
+\begin{verbatim}
+(forall (?b - box) 
+  preference allocated (collected-box ?b)
+)
+\end{verbatim}
+, the former incurring a penalty if any box is
+ not allocated and the latter incurring a 
+ penalty for each non-allocated box. 
+ The overall quality measure is given by the metric
+\begin{verbatim}
+(:metric minimize 
+  (* 2 (is-violated allocated)
+  (*100 (is-violated allBoxesAllocated)
+)
+\end{verbatim}
+ giving a linear combination of the preference of plan. 
+ A plan that reaches a goal state satisfying 
+ all preferences will have penalty of 0.
 
+\bibliographystyle{aaai}
+\bibliography{references}
 
 \end{document}
