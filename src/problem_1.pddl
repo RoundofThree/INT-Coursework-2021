@@ -92,8 +92,8 @@
 
         (trampoline-at sq-c1)
         (= (total-cost) 0)
-        (= (pliers-available p1) 0)
-        (= (bombs-available p1) 0)
+        (= (pliers-available p1) 10)
+        (= (bombs-available p1) 10)
         (= (collected-coins) 0)
     )
 
