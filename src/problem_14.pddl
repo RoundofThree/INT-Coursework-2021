@@ -1,4 +1,6 @@
-(define (problem p335steps)
+; Best: 335 steps
+; without tools 
+(define (problem problem_14)
     (:domain sokoban)
     (:objects
         sq-a1 sq-a2 sq-a3 sq-a4 sq-a5 sq-a6 sq-a7 sq-a8 sq-a9 sq-a10 sq-a11 sq-a12 - square

@@ -1,4 +1,5 @@
-; 282 steps
+; Best: 282 steps
+; without tools 
 (define (problem problem_13)
     (:domain sokoban)
     (:objects

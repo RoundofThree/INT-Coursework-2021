@@ -1,5 +1,5 @@
-;microban 88 
-; 195 steps
+; Best: 195 steps
+; without tools 
 (define (problem problem_9)
     (:domain sokoban)
     (:objects
