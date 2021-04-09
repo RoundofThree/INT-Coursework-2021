@@ -137,7 +137,7 @@
         (= (total-cost) 0)
         (= (collected-coins) 0)
         (= (bombs-available p1) 0)
-        (= (pliers-available p1) 10)
+        (= (pliers-available p1) 0)
     )
 
     (:goal (and 

@@ -2,7 +2,7 @@
 ; Best: 20 something 
 ; without tools 
 
-(define (problem problem_1)
+(define (problem p24steps)
     (:domain sokoban)
     (:objects
         sq-a1 sq-a2 sq-a3 sq-a4 sq-a5 sq-a6 - square
@@ -163,7 +163,7 @@
         (= (total-cost) 0)
         (= (collected-coins) 0)
         (= (bombs-available p1) 0)
-        (= (pliers-available p1) 10)
+        (= (pliers-available p1) 0)
     )
 
     (:goal (and 
