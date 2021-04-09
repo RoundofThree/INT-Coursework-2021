@@ -1,7 +1,7 @@
 name: Execute on push
 on:
   push: 
-    branches: [ master, sokoban_planning ]
+    branches: [ master ]
 jobs:
   execute:
     runs-on: ubuntu-latest

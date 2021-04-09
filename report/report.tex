@@ -1,0 +1,442 @@
+\def\year{2020}\relax
+%File: formatting-instruction.tex
+\documentclass[letterpaper]{article} % DO NOT CHANGE THIS
+\usepackage{aaai20}  % DO NOT CHANGE THIS
+\usepackage{times}  % DO NOT CHANGE THIS
+\usepackage{helvet} % DO NOT CHANGE THIS
+\usepackage{courier}  % DO NOT CHANGE THIS
+\usepackage[hyphens]{url}  % DO NOT CHANGE THIS
+\usepackage{graphicx} % DO NOT CHANGE THIS
+\urlstyle{rm} % DO NOT CHANGE THIS
+\def\UrlFont{\rm}  % DO NOT CHANGE THIS
+\usepackage{graphicx}  % DO NOT CHANGE THIS
+\frenchspacing  % DO NOT CHANGE THIS
+\setlength{\pdfpagewidth}{8.5in}  % DO NOT CHANGE THIS
+\setlength{\pdfpageheight}{11in}  % DO NOT CHANGE THIS
+% plot line graphs
+\usepackage{pgfplots, pgfplotstable}
+\pgfplotsset{compat=1.16}
+% \nocopyright
+%PDF Info Is REQUIRED.
+% For /Author, add all authors within the parentheses, separated by commas. No accents or commands.
+% For /Title, add Title in Mixed Case. No accents or commands. Retain the parentheses.
+ \pdfinfo{
+/Title (Sokoban: PDDL Domain planning with Single-Agent)
+/Author (Zhuo Ying Jiang Li,Shumeng Liu,Jiaqing Nie,Wenyu Zheng,Xin Fan Guo)
+} %Leave this
+% /Title ()
+% Put your actual complete title (no codes, scripts, shortcuts, or LaTeX commands) within the parentheses in mixed case
+% Leave the space between \Title and the beginning parenthesis alone
+% /Author ()
+% Put your actual complete list of authors (no codes, scripts, shortcuts, or LaTeX commands) within the parentheses in mixed case.
+% Each author should be only by a comma. If the name contains accents, remove them. If there are any LaTeX commands,
+% remove them.
+
+% DISALLOWED PACKAGES
+% \usepackage{authblk} -- This package is specifically forbidden
+% \usepackage{balance} -- This package is specifically forbidden
+% \usepackage{caption} -- This package is specifically forbidden
+% \usepackage{color (if used in text)
+% \usepackage{CJK} -- This package is specifically forbidden
+% \usepackage{float} -- This package is specifically forbidden
+% \usepackage{flushend} -- This package is specifically forbidden
+% \usepackage{fontenc} -- This package is specifically forbidden
+% \usepackage{fullpage} -- This package is specifically forbidden
+% \usepackage{geometry} -- This package is specifically forbidden
+% \usepackage{grffile} -- This package is specifically forbidden
+% \usepackage{hyperref} -- This package is specifically forbidden
+% \usepackage{navigator} -- This package is specifically forbidden
+% (or any other package that embeds links such as navigator or hyperref)
+% \indentfirst} -- This package is specifically forbidden
+% \layout} -- This package is specifically forbidden
+% \multicol} -- This package is specifically forbidden
+% \nameref} -- This package is specifically forbidden
+% \natbib} -- This package is specifically forbidden -- use the following workaround:
+% \usepackage{savetrees} -- This package is specifically forbidden
+% \usepackage{setspace} -- This package is specifically forbidden
+% \usepackage{stfloats} -- This package is specifically forbidden
+% \usepackage{tabu} -- This package is specifically forbidden
+% \usepackage{titlesec} -- This package is specifically forbidden
+% \usepackage{tocbibind} -- This package is specifically forbidden
+% \usepackage{ulem} -- This package is specifically forbidden
+% \usepackage{wrapfig} -- This package is specifically forbidden
+% DISALLOWED COMMANDS
+% \nocopyright -- Your paper will not be published if you use this command
+% \addtolength -- This command may not be used
+% \balance -- This command may not be used
+% \baselinestretch -- Your paper will not be published if you use this command
+% \clearpage -- No page breaks of any kind may be used for the final version of your paper
+% \columnsep -- This command may not be used
+% \newpage -- No page breaks of any kind may be used for the final version of your paper
+% \pagebreak -- No page breaks of any kind may be used for the final version of your paperr
+% \pagestyle -- This command may not be used
+% \tiny -- This is not an acceptable font size.
+% \vspace{- -- No negative value may be used in proximity of a caption, figure, table, section, subsection, subsubsection, or reference
+% \vskip{- -- No negative value may be used to alter spacing above or below a caption, figure, table, section, subsection, subsubsection, or reference
+
+\setcounter{secnumdepth}{0} %May be changed to 1 or 2 if section numbers are desired.
+
+% The file aaai20.sty is the style file for AAAI Press
+% proceedings, working notes, and technical reports.
+%
+\setlength\titlebox{2.5in} % If your paper contains an overfull \vbox too high warning at the beginning of the document, use this
+% command to correct it. You may not alter the value below 2.5 in
+\title{Sokoban: PDDL Domain planning with Single-Agent}
+%Your title must be in mixed case, not sentence case.
+% That means all verbs (including short verbs like be, is, using,and go),
+% nouns, adverbs, adjectives should be capitalized, including both words in hyphenated terms, while
+% articles, conjunctions, and prepositions are lower case unless they
+% directly follow a colon or long dash
+\author{Written by Bachelor students from King's College London \\  % All authors must be in the same font size and format. Use \Large and \textbf to achieve this result when breaking a line
+Zhuo Ying Jiang Li - zhuo.jiang\_li@kcl.ac.uk,\textsuperscript{\rm 1}
+Shumeng Liu - shumeng.liu@kcl.ac.uk\textsuperscript{\rm 2} \\
+Jiaqing Nie - jiaqing.nie@kcl.ac.uk, \textsuperscript{\rm 3}
+Wenyu Zheng - wenyu.zheng@kcl.ac.uk \textsuperscript{\rm 4} \\
+Xin Fan Guo - xinfan.guo@kcl.ac.uk \textsuperscript{\rm 5} \\ %If you have multiple authors and multiple affiliations
+% use superscripts in text and roman font to identify them. For example, Sunil Issar,\textsuperscript{\rm 2} J. Scott Penberthy\textsuperscript{\rm 3} George Ferguson,\textsuperscript{\rm 4} Hans Guesgen\textsuperscript{\rm 5}. Note that the comma should be placed BEFORE the superscript for optimum readability
+% email address must be in roman text type, not monospace or sans serif
+}
+\usepackage{xcolor}
+ \begin{document}
+
+\maketitle
+
+\begin{abstract}
+Planning in artificial intelligence has been instrumental in a variety of applications. Game serves as a good testing ground for various model planning in PDDL. This paper focuses on PDDL  domain planning and problem analysis of a puzzle-based video game Sokoban.  The reason for this choice is simple, Sokoban is a puzzle-based game that offers intricate dynamics and great complexity for testing planners. Secondly, Sokoban also has some flexibility and offers room for expansion and creativity. As we will see in the following section, we will add our own proposed ideas i.e., tools based on traditional models.  Sokoban problem file ranges with different levels of complicity, thus offers complexity which can be used as the benchmark for evaluating overall plan quality (Sokoban is  a PSPACE-complete problem). The proposed domain will focus on a deterministic model with single-agent and known initial states where state changes are based on the actions proposed by the plan.
+\end{abstract}
+
+\section{Introduction}
+This model simulates a well-known grid-based puzzle video game \emph{"Sokoban"}. The original game comes with an 
+objective for a player to push all boxes into predefined storage locations or units. For sake of scalability
+and variations of problem files, we have added some tools to the classic version of the game. The domain represents
+a 2D \(N*N\) grid with helper tools such as \emph{"trampoline"} which enables player to jump across the wall.
+The player can also take a number of \emph{"bomb"} and \emph{"pliers"} with them. The former enables the player to
+break walls while the latter enables the player to pull box in any direction. Those two items are consumable, which
+means their quantity decreases with each usage, and they can also be placed on grids to be picked up by user.
+Because the domain world is represented by a grid with composite squares as single units. The convention used in the 
+problem files are grids being vertically marked with ascending numbers and horizontally with alphabetical characters 
+growing with lexical order (i.e. the most top-left square is represented as \emph{"sq-a1"}, please see Figure \ref{fig:example}).  
+It is worth noting that in a sokoban game, There is no designated storage location for each box. The player
+would win as long as they allocate all boxes to storage locations (marked as collected box if box is pushed on the hole
+- storage location). Therefore, in our implementation, we let planner freely choose to which storage location 
+(represented as a hole in our domain world) the box should be placed. In addition, player can re-allocate boxes even 
+if it is already on storage location. Those features add to flexibility and increment the possibility of finding a 
+plan. For creativity considerations, we have randomly added coins on squares to be picked up. The overall aim of modified
+version \emph{"Sokoban 2.0"} is to push all the boxes on storage units with minimum total cost and maximum number of coins collected on the way.  
+\begin{figure}
+    \includegraphics[width=2.8in]{figure1.JPG} \\
+    \caption{Example of proposed Sokoban puzzle solved with 33 steps using OPTIC planner}\label{fig:example}
+\end{figure}
+
+\section{Part I: Designing a Planning Domain}
+In the following section we will pick the most interesting parts of our domain and introduce reasoning behind the design choices and declarations in our domain.pddl file.
+
+\subsubsection{Domain constants}
+To reinforce the idea of a single-agent problem we have declared a player \emph{"p1"} as constant to avoid ambiguity of multi-players. Throughout our problem and domain file this player will be the only actor in our proposed world.
+
+\subsubsection{Domain predicates}
+Probably the most important predicate from our domain is \texttt{(collected-box ?b -box)}. As mentioned, the proposed domain file does restrict itself on specific goals (placing boxes on predefined squares). Instead our aim is to have all declared boxes \emph{"collected"} without explicitly mentioning where to position different boxes. We have in essence given a \emph{free-hand} and left the decision on the planner to find the \emph{"best-optimal solution"}.
+
+\subsubsection{Domain requirements}
+Requirement declaration includes\texttt{:constraints,:universal-preconditions, :typing,:fluents,:preferences }and\texttt{ :action-costs}. The reason behind declaration of above stated requirements is given as follows:
+
+\begin{itemize}
+\item \texttt{:typing} - reflect different object types in the domain i.e., player, box, square as single object declaration can’t represent all different entities in the domain.
+\item \texttt{:universal-preconditions} - The use of universal quantifier spared us writing lengthy and tedious preconditions or goals. For instance, instead of listing all collected boxes (boxes on storage units) in conjunction in the form of \texttt{(:goal (and (collected-box \(b_1 ..b_n, b_{n+1}\))))} where \(n >= 1\) we could simply write \texttt{(:goal (forall (?b - box) (collected box)))} indicating that our \emph{hard goal} is to place all existing boxes on some storage units.
+\item \texttt{:fluents} - We also exploit the feature of using complete numeric subset of PDDL and use numeric modelling throughout our domain file. Declaring numeric state variables through \texttt{:fluents} allowed numeric formulation of our actions i.e., break-north-wall with precondition
+\texttt{(>(bomb-available ?p) 0)} which restrict the occurrence of the action unless we have more than \(x >= 1\) bombs. Since Sokoban is PSPACE-complete problem, thus problem file evaluation can increase exponentially with size of the search space. For problem file simplification reasons, we have introduced pull action as oppose to traditional Sokoban game which only allows push . Expressed as pull-\emph{direction} with condition \texttt{(>(pliers-available) 0)} indicating that player is able to pull if it has the tool \emph{"plier"}. The number of pre-set pliers initialised in the ground function increases with difficulty of the problem file.
+\item \texttt{:preferences} - Declaration of preferences in the domain file enables us to achieve soft goals and define properties that we would like to achieve but are not compulsory. Thus, we have exploited this feature and defined that it will be preferable for the player to collect as much coins as possible. Implemented through \texttt{(:goal (preference (> (collected-coins) 0))}.
+\item \texttt{:action-cost} -  For optimisation reasons, every action in our action schema comes with  a cost which means that every move will incur penalty.  Our goal is to minimize incurred action cost in planning metric so minimum number of steps are taken to reach the objective.  This was realized through declaration of \texttt{:function (total-cost)},\texttt{:effect (increase (total-cost) 1)}and\texttt{ :metric (minimize (total-cost))}.
+\end{itemize}
+
+\subsubsection{Domain actions}
+The introduced action schema tries to mimic all possible moves taken by player. Every single action in the domain file is named in self-explanatory way i.e., pull-\emph{direction}, push-\emph{direction}, jump-\emph{direction}, break-\emph{direction} and pick-up-\emph{tool}(bomb, coin, trampoline). Implementing domain file using this kind of architecture allows better trackability of generated plan. It is also important to mention here that push and pull actions come in two different versions i.e., push-\emph{direction}, push-\emph{direction}-to-hole. Former indicating a push to free location , latter indicating a push to hole or storage location (See following section for reason).
+
+\subsubsection{Planner constraints and proposed solutions}
+\textbf{OPTIC} planner provided lacks several important functionalities such as support for the \textbf{ADL}, conditional effects and negative preconditions. For such reasons we remodelled the action schema to avoid those features. As some action’s preconditions are made up of a single or clauses of \emph{k} terms \cite{haslum_2019}, we have remodelled the problem to create \emph{k} copies of an action and used one term for each as a regular precondition i.e., instead of writing in the \texttt{:effect (when(hole-at ?box-after-move))} to represent condition when a box is moved on a hole after push or pull. We have re-written this into two push and pull actions i.e., push-up with \texttt{:precondition (no-hole-at ?box-after-move)} and push-up-to-hole with \texttt{:precondition (hole-at ?box-after-move)} and \texttt{:effect (collected-box ?box)}. As mentioned \textbf{OPTIC}  also does not support negative precondition, therefore all predicates which need to be negative in the precondition have been represented by two static predicates i.e., has- trampoline and has-no-trampoline to indicate that a player has this tool. While in principle this does allow \textbf{OPTIC} to work with this problem, but as a result it reduces efficiency and come at expense given increased number of actions required.
+
+\subsubsection{Possible domain improvements}
+Although axioms do not increase language expressiveness, but it will be great to include \emph{derived predicates} as it decreases the domain description size and plan length, compiling away from axiom can result in an exponential growth in number of actions. In our case instead of listing all squares which are above one another in the problem file i.e., \texttt{(above sq-a1 sq-a2)} indicating square \emph{a1} being above \emph{a2}. We could have written \texttt{((: derived (above? a ?b - squares) (and (left-to b?  ?c) (above c? ?a))} that recursively defines the relationship between pairs of squares.
+
+\section{Part II: Problem analysis}
+In this section we will analyse the planner's ability to solve problems in this domain and whether some domain features will
+make it harder to solve for the planner. We will also compare the plan quality of the plans to a selected benchmark.
+
+\subsection{Difficulty measure as problem selection criteria}
+To select a robust and more complete range of problems in the puzzle domain, we chose to classify the problems according
+ to a difficulty measure, and then select a problem suite which covers low difficulty to high difficulty problems.
+ However, finding which problem parameter is the most representative difficulty measure is not an easy task. There are many plausible measures, such as
+  the number of steps taken to push all the boxes to the holes, the time taken by a solver (human or artificial
+  intelligence planner) to solve the puzzle or the percentage of successful plays. We will use the first one as our
+  difficulty measure heuristics for this research project for the sake of simplicity.
+
+\subsection{Selected problem suite}
+Specifically, we will order the problems according to the
+minimum number of steps
+taken by a human player to solve it, starting with a
+problem with best score 25 steps up to a problem with
+best score 429 steps. The data of the best scores of
+human players are collected from the Sokoban Online website \cite{microban}.
+This is more representative than trying to solve the
+problems ourselves and using our best score to compare
+to that of the OPTIC planner. Given that the Sokoban Online
+community is an active community with global Sokoban
+grandmasters, it is likely that the best score data
+from the website is the global minimum number of steps
+to solve each problem.
+
+These problems are, however, just testing a part of
+the expressiveness of our domain, because our PDDL
+domain can also encode the use of tools ---
+bombs, pliers and trampolines. Thus, we run the same set
+of problems but with added tools (each initially
+with 10 available pliers) to observe how planner
+would handle those additional actions.
+
+Problem 1 to 15 are taken from the forementioned Sokoban Online website, while problem 16
+to 30 are essentially the same 15 problems but provided with 10 pliers. Hence, in following
+analysis, problem 16 to 30 are referred to as the "with tool" version of problem 1 to 15.
+Problem 31 is an experimental small problem to test trampoline and bomb functionalities
+defined in the domain file.
+
+\subsection{Anomalies in difficulty rating}
+Before diving into the analysis of the planner's plans, note
+that there may be anomalies in our difficulty assessment
+and the planner's behaviour. There may be some problems
+which are easier to solve according to our difficulty measure but
+the planner is not able to find a solution. While we expect
+that the plan quality compared to a benchmark decreases as the
+difficulty increases, it is possible to find counterexamples,
+because the difficulty measure (smallest
+number of steps required to solve by human players in Sokoban Online)
+is merely a heuristics.
+
+\subsection{Plan quality measure}
+In a Sokoban game, players are rated according to the number
+of steps they use to solve the game, and the lowest number
+is marked as their best score. Therefore, using the number of steps
+as plan quality measure fits well our purpose.
+
+In some online games, players are also ranked according to
+the time taken to solve the level. However, the major problem
+with this quality measure is its strong dependence
+on hardware in which the planner is running on.
+It is thus not worth comparing the planner's resolution time
+with human players' average time.
+
+Another possible quality measure is the number of coins the
+planner collects during its plan trajectory. However, we tested
+the OPTIC planner with a trivial game instance where there is a
+coin in the initial position of the player and the player only
+has to push the box forward to solve the game. It turns out that
+the planner's plan does not collect the immediately available coin.
+
+From what is stated above, we will choose the number of steps
+as the plan quality measure for this reasearch.
+The benchmark is the best player score in Sokoban Online website \cite{microban}.
+\subsection{Plan quality analysis}
+The diagram in Figure 2 illustrates how the solution given by the
+planner (without tools) differs from the benchmark in terms of number
+of steps taken. The trend from problem 1 to problem 14
+suggests that number of steps is effectively a good estimation of
+problem difficulty. The planner can sometimes find the
+optimal solution for problems with under 33 moves.
+Between 40 to 200 steps, even if the problem is solvable
+by the planner, the difference between the benchmark and the
+plan's number of steps is increasing.
+Beyond that, the problem size becomes
+unsolvable. However, the planner managed to solve the
+problem 15, when it requires 429 steps for a human player
+to solve it.
+Problem 15 is distinctive because
+it involves only one box, while other problems with difficulty
+heuristics equal to
+200-plus steps consist of at least 3 boxes.
+
+This discovery implies that, the number of steps required is not
+the mere factor that makes a problem difficult, the number of boxes
+or other underlying characteristics of the problem also play a role.
+A similar point is also suggested in a research study:
+there is no single difficulty measure which gives consistent
+evaluation of the actual difficulty for all problem instances
+\cite{difficulty-rating}.
+% Figure 2
+\pgfplotstableread[col sep=&, header=true]{
+description&planner&benchmark
+1&28&24
+2&33&25
+3&33&33
+4&81&69
+5&126&100
+6&129&117
+7&0&119
+8&201&169
+9&225&195
+10&263&201
+11&0&212
+12&0&233
+13&0&282
+14&0&335
+15&429&429
+}\datatableentry
+\begin{figure}
+\begin{tikzpicture}
+    \begin{axis}[
+        enlarge y limits ={value=0.2,upper},
+        xtick=data,
+        xticklabels ={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},
+        x tick label style={rotate=-45,anchor=west,font=\tiny},
+        legend style={font=\tiny,legend pos=north west,legend cell align=left},
+        xlabel = {Problem number},
+	      ylabel = {Number of steps},
+      ]
+      \addlegendentry{Planner};
+      \addplot [color=red] table [y=planner, x expr=\coordindex] {\datatableentry};
+      \addlegendentry{Benchmark};
+      \addplot [color=gray] table [y=benchmark, x expr=\coordindex] {\datatableentry};
+    \end{axis}
+\end{tikzpicture}
+\caption{By number of steps}
+\end{figure}
+
+Moreover, for a human player, providing additional tools, such as pliers, would
+only make the problems easier to solve. However, when it comes to planners,
+it seems not the case. When experimenting with the problem files, we noticed
+that, despite it would solve the problem without any tools, the planner is
+unable to give any solution for problems 9 and 10 when provided with 10
+pliers. A plausible explanation is illustrated in in Figure 3 and
+Figure 4.
+% Figure 3
+\pgfplotstableread[col sep=&, header=true]{
+description&with-tools&without-tools
+1&147&106
+2&87&1150
+3&35&396
+4&12889&6475
+5&137535&7276
+6&87887&89873
+7&21992&0
+8&97430&55628
+9&0&41715
+10&0&31984
+11&0&0
+12&0&0
+13&0&0
+14&0&0
+15&50172&6150
+}\datatableentry
+\begin{figure}
+\begin{tikzpicture}
+    \begin{axis}[
+        enlarge y limits ={value=0.2,upper},
+        xtick=data,
+        xticklabels ={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},
+        x tick label style={rotate=-45,anchor=west,font=\tiny},
+        legend style={font=\tiny,legend pos=north west,legend cell align=left},
+        xlabel = {Problem number},
+	      ylabel = {Solve time},
+      ]
+      \addlegendentry{Planner with tools};
+      \addplot [color=blue] table [y=with-tools, x expr=\coordindex] {\datatableentry};
+      \addlegendentry{Planner without tools};
+      \addplot [color=red] table [y=without-tools, x expr=\coordindex] {\datatableentry};
+    \end{axis}
+\end{tikzpicture}
+\caption{By solve time}
+\end{figure}
+% ADD a column of total states in search space
+% search space = 2^{number predicates}
+% number predicates = |square|+|box|*|square|+|square|+|bomb|+|coin|+|square|*|square|*2+|square|+|square|+|box|+|square|+1
+%                   = (|box|+2*|square|+5)*|square| + |bomb| + |coin| + |box| + 1
+% Problem 1: |square| = 36, |box| = 2, search space = overflow
+% Figure 4
+\pgfplotstableread[col sep=&, header=true]{
+description&with-tools&without-tools
+1&0.13&0.11
+2&0.1&1.73
+3&0.03&0.28
+4&44.31&21.84
+5&533.50&25.53
+6&301.88&358.41
+7&88.38&0
+8&397.06&297.89
+9&0&274.08
+10&0&205.84
+11&0&0
+12&0&0
+13&0&0
+14&0&0
+15&479.55&48.96
+}\datatableentry
+\begin{figure}
+\begin{tikzpicture}
+    \begin{axis}[
+        enlarge y limits ={value=0.2,upper},
+        xtick=data,
+        xticklabels ={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},
+        x tick label style={rotate=-45,anchor=west,font=\tiny},
+        legend style={font=\tiny,legend pos=north west,legend cell align=left},
+        xlabel = {Problem number},
+	      ylabel = {Number of states evaluated},
+      ]
+      \addlegendentry{Planner with tools};
+      \addplot [color=blue] table [y=with-tools, x expr=\coordindex] {\datatableentry};
+      \addlegendentry{Planner without tools};
+      \addplot [color=red] table [y=without-tools, x expr=\coordindex] {\datatableentry};
+    \end{axis}
+\end{tikzpicture}
+\caption{By number of states evaluated}
+\end{figure}
+These two diagrams show that, due to more actions become possible,
+when provided with additional tools, planner would evaluate more
+states and take a longer time to derive a solution. This implies
+the planner fails to effectively prune out bad uses of the tool and
+wasted a lot of resources exploring unsolvable states.
+\subsection{Plan quality analysis improvements}
+The only measure of the plan quality was whether
+the designed plan solves the problem and how many
+steps have been taken to achieve the goal. Perhaps a better
+evolution strategy is to define a set of preferable
+soft goals which is preferable to achieve but not
+compulsory. As the plan results in a higher number
+of correctly allocated boxes, the higher the quality
+of the plan.  This is helpful to analyse problems
+of higher difficulty in more detail rather than
+treating them all as unsolvable. We can observe
+how the plan quality over the benchmark increases
+or deteriorates, based on the number of achieved
+soft goals.
+
+If OPTIC supports \texttt{:preference} and \texttt{forall}
+PDDL features we could write
+\begin{verbatim}
+(preference allBoxesAllocated
+  (forall (?b - box) (collected-box ?b))
+)
+\end{verbatim}
+or
+\begin{verbatim}
+(forall (?b - box)
+  preference allocated (collected-box ?b)
+)
+\end{verbatim}
+, the former incurring a penalty if any box is
+ not allocated and the latter incurring a
+ penalty for each non-allocated box.
+ The overall quality measure is given by the metric
+\begin{verbatim}
+(:metric minimize
+  (* 2 (is-violated allocated)
+  (*100 (is-violated allBoxesAllocated)
+)
+\end{verbatim}
+ giving a linear combination of the preference of plan.
+ A plan that reaches a goal state satisfying
+ all preferences will have penalty of 0.
+
+\newpage
+
+\bibliographystyle{aaai}
+\bibliography{references}
+
+\end{document}

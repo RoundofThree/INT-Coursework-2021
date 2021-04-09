@@ -1,4 +1,6 @@
-(define (problem problem_X)
+; with tools
+; 169 steps
+(define (problem problem_23)
     (:domain sokoban)
     (:objects
         sq-a1 sq-a2 sq-a3 sq-a4 sq-a5 sq-a6 sq-a7 sq-a8 sq-a9 sq-a10 sq-a11 - square
@@ -394,17 +396,18 @@
 
 
         (has-no-trampoline)
-        (= (time) 9)
+        (= (total-cost) 0)
         (= (collected-coins) 0)
         (= (bombs-available p1) 0)
-        (= (pliers-available p1) 0)
+        (= (pliers-available p1) 10)
     )
-    (:goal
-        (and
-            (collected-box b1)
-            (collected-box b2)
-            (collected-box b3)
-            (collected-box b4)
-        )
+
+    (:goal (and 
+       (forall (?b - box) (collected-box ?b))
+        ; (> (collected-coins) 0)
+        (preference  (> (collected-coins) 0))
+     )
     )
+
+    (:metric minimize (-(total-cost) (collected-coins)))
 )
