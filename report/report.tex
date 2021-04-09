@@ -15,6 +15,7 @@
 \setlength{\pdfpageheight}{11in}  % DO NOT CHANGE THIS
 % plot line graphs 
 \usepackage{pgfplots, pgfplotstable}
+\pgfplotsset{compat=1.16}
 %\nocopyright
 %PDF Info Is REQUIRED.
 % For /Author, add all authors within the parentheses, separated by commas. No accents or commands.
@@ -136,7 +137,7 @@ Requirement declaration includes\texttt{ :constraints,:universal-preconditions, 
 The introduced action schema tries to mimic all possible moves taken by player. Every single action in the domain file is named in self-explanatory way i.e., pull-\emph{direction}, push-\emph{direction}, jump-\emph{direction}, break-\emph{direction} and pick-up-\emph{tool}(bomb, coin, trampoline). Implementing domain file using this kind of architecture allows better trackability of generated plan. It is also important to mentioned here that push and pull actions come in two different version i.e., push-\emph{direction}, push-\emph{direction}-to-hole. Former indicating a push to free location , latter indicating a push to hole or storage location (See following section for reason).
 
 \subsubsection{Planner constraints and proposed solutions}
-\textbf{OPTIC} planner provided lacks several important functionalities such as support for the \textbf{ADL}, conditional effects and negative preconditions. For such reasons we remodelled the action schema to avoid those features. As some action’s preconditions are made up of a single or clauses of \emph{k} terms, we have remodelled the problem to create \emph{k} copies of an action and used one term for each as a regular precondition i.e., instead of writing in the \texttt{:effect (when(hole-at ?box-after-move))} to represent condition when a box is moved on a hole after push or pull. We have re-written this into two push and pull actions i.e., push-up with \texttt{:precondition (no-hole-at ?box-after-move)} and push-up-to-hole with \texttt{:precondition (hole-at ?box-after-move)} and \texttt{:effect (collected-box ?box)}. As being mentioned \textbf{OPTIC}  also does not support negative precondition, therefore all predicates which needs to be negative in the precondition have been represented by two static predicates i.e., has- trampoline and has-no-trampoline to indicate that a player has this tool. While in principle this does allows \textbf{OPTIC} to work with this problem, but as a result it reduces efficiency and come at expense given increased number of actions required.   
+\textbf{OPTIC} planner provided lacks several important functionalities such as support for the \textbf{ADL}, conditional effects and negative preconditions. For such reasons we remodelled the action schema to avoid those features. As some action’s preconditions are made up of a single or clauses of \emph{k} terms \cite{haslum_2019}, we have remodelled the problem to create \emph{k} copies of an action and used one term for each as a regular precondition i.e., instead of writing in the \texttt{:effect (when(hole-at ?box-after-move))} to represent condition when a box is moved on a hole after push or pull. We have re-written this into two push and pull actions i.e., push-up with \texttt{:precondition (no-hole-at ?box-after-move)} and push-up-to-hole with \texttt{:precondition (hole-at ?box-after-move)} and \texttt{:effect (collected-box ?box)}. As being mentioned \textbf{OPTIC}  also does not support negative precondition, therefore all predicates which needs to be negative in the precondition have been represented by two static predicates i.e., has- trampoline and has-no-trampoline to indicate that a player has this tool. While in principle this does allows \textbf{OPTIC} to work with this problem, but as a result it reduces efficiency and come at expense given increased number of actions required.   
 
 \subsubsection{Possible domain improvements}
 Although axioms do not increase language expressiveness, but it will be great to include \emph{derived predicates} as it decreases the domain description size and plan length, compiling away from axiom can result in an exponential growth in number of actions. In our case instead of listing all squares which are above one another in the problem file i.e., \texttt{(above sq-a1 sq-a2)} indicating square \emph{a1} being above \emph{a2}. We could have written \texttt{((: derived (above? a ?b - squares) (and (left-to b?  ?c) (above c? ?a))} that recursively defines relationship between pairs of squares.   
@@ -159,7 +160,7 @@ minimum number of steps
 taken by a human player to solve it, starting with a 
 problem with best score 25 steps up to a problem with 
 best score 429 steps. The data of the best scores of
-human players are collected from the Microban website. \textbf{Please cite the Microban website!!}. 
+human players are collected from the Microban website \cite{microban}. 
 This is more representative than trying to solve the 
 problems ourselves and using our best score to compare 
 to that of the OPTIC planner. Given that the Microban 
@@ -210,13 +211,9 @@ the planner's plan does not collect the immediately available coin.
 
 From what is stated above, we will choose the number of steps 
 as the plan quality measure for this reasearch. 
-The benchmark is the best player score in Microban website (\textbf{citeme!!!}).
-
-
-
+The benchmark is the best player score in Sokoban Online website \cite{microban}.
 \subsection{Plan quality analysis}
-
-The diagram in \textbf{Figure 1} illustrates how the solution given by the 
+The diagram in \textbf{Figure 2} illustrates how the solution given by the 
 planner (without tools) differs from the benchmark in terms of number 
 of steps taken. The trend from problem 1 to problem 15 
 suggests that number of steps is effectively a good estimation of 
@@ -241,8 +238,7 @@ A similar point is also suggested in a research study:
 there is no single difficulty measure which gives consistent 
 evaluation of the actual difficulty for all problem instances
 \cite{difficulty-rating}.
-
-% Figure 1 
+% Figure 2
 \pgfplotstableread[col sep=&, header=true]{
 description&planner&benchmark
 1&28&24
@@ -261,11 +257,9 @@ description&planner&benchmark
 14&0&335
 15&429&429
 }\datatableentry
-
 \begin{figure}
 \begin{tikzpicture}
     \begin{axis}[
-        title={By number of steps},
         enlarge y limits ={value=0.2,upper},
         xtick=data,
         xticklabels ={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},  
@@ -281,22 +275,18 @@ description&planner&benchmark
       \addlegendentry{Benchmark};
       \addplot [color=gray] table [y=benchmark, x expr=\coordindex] {\datatableentry};
     \end{axis}
-
 \end{tikzpicture}
 \caption{By number of steps}
 \end{figure}
-
 
 Moreover, for a human player, providing additional tools, such as pliers, would 
 only make the problems easier to solve. However, when it comes to planners, 
 it seems not the case. When experimenting with the problem files, we noticed 
 that, despite it would solve the problem without any tools, the planner is 
 unable to give any solution for problems 10 and 11 when provided with 10 
-pliers. A plausible explanation is illustrated in in \textbf{Figure 2} and 
-\textbf{Figure 3}. 
-
-
-% Figure 2
+pliers. A plausible explanation is illustrated in in \textbf{Figure 3} and 
+\textbf{Figure 4}.
+% Figure 3
 \pgfplotstableread[col sep=&, header=true]{
 description&with-tools&without-tools
 1&147&106
@@ -315,10 +305,9 @@ description&with-tools&without-tools
 14&0&0
 15&50172&6150
 }\datatableentry
-
+\begin{figure}
 \begin{tikzpicture}
     \begin{axis}[
-        title={By solve time},
         enlarge y limits ={value=0.2,upper},
         xtick=data,
         xticklabels ={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},  
@@ -334,15 +323,15 @@ description&with-tools&without-tools
       \addlegendentry{Benchmark};
       \addplot [color=gray] table [y=benchmark, x expr=\coordindex] {\datatableentry};
     \end{axis}
-
 \end{tikzpicture}
-
+\caption{By solve time}
+\end{figure}
 % ADD a column of total states in search space 
 % search space = 2^{number predicates}
 % number predicates = |square|+|box|*|square|+|square|+|bomb|+|coin|+|square|*|square|*2+|square|+|square|+|box|+|square|+1
 %                   = (|box|+2*|square|+5)*|square| + |bomb| + |coin| + |box| + 1
 % Problem 1: |square| = 36, |box| = 2, search space = overflow
-% Figure 3
+% Figure 4
 \pgfplotstableread[col sep=&, header=true]{
 description&with-tools&without-tools
 1&0.13&0.11
@@ -361,10 +350,9 @@ description&with-tools&without-tools
 14&0&0
 15&479.55&48.96
 }\datatableentry
-
+\begin{figure}
 \begin{tikzpicture}
     \begin{axis}[
-        title={By number of states evaluated},
         enlarge y limits ={value=0.2,upper},
         xtick=data,
         xticklabels ={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},  
@@ -380,15 +368,14 @@ description&with-tools&without-tools
       \addlegendentry{Benchmark};
       \addplot [color=gray] table [y=benchmark, x expr=\coordindex] {\datatableentry};
     \end{axis}
-
 \end{tikzpicture}
-
+\caption{By number of states evaluated}
+\end{figure}
 These two diagrams show that, due to more actions become possible, 
 when provided with additional tools, planner would evaluate more 
 states and take a longer time to derive a solution. This implies 
 the planner fails to effectively prune out bad uses of the tool and 
 wasted a lot of resources exploring unsolvable states. 
-
 \subsection{Plan quality analysis improvements}
 The only measure of the plan quality was whether 
 the designed plan solves the problem and how many 
@@ -430,6 +417,7 @@ or
  giving a linear combination of the preference of plan. 
  A plan that reaches a goal state satisfying 
  all preferences will have penalty of 0.
+ \cite{haslum_2019}
 
 \bibliographystyle{aaai}
 \bibliography{references}
