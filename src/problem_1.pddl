@@ -1,5 +1,4 @@
-; testing re-allocation of boxes
-; Best: 24
+; Best: 24 steps
 ; without tools 
 (define (problem problem_1)
     (:domain sokoban)
