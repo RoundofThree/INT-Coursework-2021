@@ -266,10 +266,8 @@ description&planner&benchmark
         x tick label style={rotate=-45,anchor=west,font=\tiny},
         legend style={font=\tiny,legend pos=north west,legend cell align=left},
       ]
-      \addlegendentry{Planner with tools};
-      \addplot [color=blue] table [y=with-tools, x expr=\coordindex] {\datatableentry};
-      \addlegendentry{Planner without tools};
-      \addplot [color=red] table [y=without-tools, x expr=\coordindex] {\datatableentry};
+      \addlegendentry{Planner};
+      \addplot [color=red] table [y=planner, x expr=\coordindex] {\datatableentry};
       \addlegendentry{Benchmark};
       \addplot [color=gray] table [y=benchmark, x expr=\coordindex] {\datatableentry};
     \end{axis}
@@ -316,8 +314,6 @@ description&with-tools&without-tools
       \addplot [color=blue] table [y=with-tools, x expr=\coordindex] {\datatableentry};
       \addlegendentry{Planner without tools};
       \addplot [color=red] table [y=without-tools, x expr=\coordindex] {\datatableentry};
-      \addlegendentry{Benchmark};
-      \addplot [color=gray] table [y=benchmark, x expr=\coordindex] {\datatableentry};
     \end{axis}
 \end{tikzpicture}
 \caption{By solve time}
@@ -359,8 +355,6 @@ description&with-tools&without-tools
       \addplot [color=blue] table [y=with-tools, x expr=\coordindex] {\datatableentry};
       \addlegendentry{Planner without tools};
       \addplot [color=red] table [y=without-tools, x expr=\coordindex] {\datatableentry};
-      \addlegendentry{Benchmark};
-      \addplot [color=gray] table [y=benchmark, x expr=\coordindex] {\datatableentry};
     \end{axis}
 \end{tikzpicture}
 \caption{By number of states evaluated}
